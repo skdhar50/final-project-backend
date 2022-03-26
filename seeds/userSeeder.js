@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 mongoose
 	.connect("mongodb://localhost:27017/final-project-db")
 	.then(() => console.log("Connected to MongoDB server!!"))
-	.catch((err) => console.error("ERROR connecting to MongoDB server!", err));;
+	.catch((err) => console.error("ERROR connecting to MongoDB server!", err));
 
 const name = [
 	"Leland Matthews",
@@ -34,22 +34,25 @@ const email = [
 let user = [];
 
 for (let i = 0; i < 10; i++) {
-	user.push(new User({
-		name: name[i],
-		email: email[i],
-        password: "12345",
-	}));
+	user.push(
+		new User({
+			name: name[i],
+			email: email[i],
+			password: "12345",
+		})
+	);
 }
 
-for (let i = 0; i < 10; i++) {
-    user[i].save(function(err, res) {
-        if(i === 9) {
-            exit();
-        }
-    });
-}
+mongoose.connection.dropCollection("users", function (err, res) {
+	for (let i = 0; i < 10; i++) {
+		user[i].save(function (err, res) {
+			if (i === 9) {
+				exit();
+			}
+		});
+	}
+});
 
 function exit() {
-    mongoose.disconnect();
+	mongoose.disconnect();
 }
-
