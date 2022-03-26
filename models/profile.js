@@ -1,7 +1,3 @@
 const { Schema, model } = require("mongoose");
 
-const ProfileSchema = Schema({});
-
-const Profile = model("profiles", ProfileSchema);
-
-module.exports.Profile = Profile;
+module.exports.Profile = model("Profile", Schema({}, { timestamps: true }));

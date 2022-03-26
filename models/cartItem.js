@@ -1,7 +1,4 @@
 const { Schema, model } = require("mongoose");
 
-const CartItemSchema = Schema({});
+module.exports.CartItem = model("CartItem", Schema({}, { timestamps: true }));
 
-const CartItem = model("cartItems", CartItemSchema);
-
-module.exports.CartItem = CartItem;

@@ -1,9 +1,3 @@
-const {Schema, model} = require('mongoose');
+const { Schema, model } = require("mongoose");
 
-const BannerSchema = Schema({
-
-});
-
-const Banner = model("banners", BannerSchema);
-
-module.exports.Banner = Banner;
+module.exports.Banner = model("Banner", Schema({}, { timestamps: true }));

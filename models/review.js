@@ -1,7 +1,3 @@
 const { Schema, model } = require("mongoose");
 
-const ReviewSchema = Schema({});
-
-const Review = model("reviews", ReviewSchema);
-
-module.exports.Review = Review;
+module.exports.Review = model("Review", Schema({}, { timestamps: true }));

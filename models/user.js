@@ -1,7 +1,3 @@
 const { Schema, model } = require("mongoose");
 
-const UserSchema = Schema({});
-
-const User = model("users", UserSchema);
-
-module.exports.User = User;
+module.exports.User = model("User", Schema({}, { timestamps: true }));

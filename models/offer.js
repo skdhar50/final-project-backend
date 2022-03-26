@@ -1,7 +1,4 @@
 const { Schema, model } = require("mongoose");
 
-const OfferSchema = Schema({});
+module.exports.Offer = model("Offer", Schema({}, { timestamps: true }));
 
-const Offer = model("offers", OfferSchema);
-
-module.exports.Offer = Offer;

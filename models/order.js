@@ -1,7 +1,4 @@
 const { Schema, model } = require("mongoose");
 
-const OrderSchema = Schema({});
+module.exports.Order = model("Order", Schema({}, { timestamps: true }));
 
-const Order = model("orders", OrderSchema);
-
-module.exports.Order = Order;
