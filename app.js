@@ -1,5 +1,5 @@
 require("express-async-errors");
-const app = express()();
+const app = require("express")();
 const error = require("./middlewares/error");
 
 require("./middlewares/")(app);
