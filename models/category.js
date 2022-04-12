@@ -8,6 +8,10 @@ module.exports.Category = model(
 				type: String,
 				unique: true,
 			},
+			parent_id: {
+				type: Schema.Types.ObjectId,
+				ref: "Category",
+			},
 			status: {
 				type: String,
 				enum: ["active", "inactive"],
