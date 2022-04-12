@@ -44,6 +44,11 @@ module.exports.Order = model(
 				enum: ["pending", "complete"],
 				default: "pending",
 			},
+			payment_method: {
+				type: String,
+				enum: ["cod", "card", "bkash", "rocket"],
+				default: "cod",
+			},
 			user: {
 				type: Schema.Types.ObjectId,
 				ref: "User",
@@ -60,6 +65,12 @@ module.exports.Order = model(
 				],
 				default: "pending",
 			},
+			call_status: {
+				type: String,
+				enum: ["no_call", "one_time", "two_time", "three_time"],
+				default: "no_call",
+			},
+			discount: Number,
 		},
 		{ timestamps: true }
 	)

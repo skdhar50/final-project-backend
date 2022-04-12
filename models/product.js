@@ -18,8 +18,11 @@ module.exports.Product = model(
 				ref: "Brand",
 			},
 			quantity: Number,
-			photo: String,
+			photos: [String],
 			unitPrice: Number,
+			size: String,
+			color: String,
+			weight: String,
 		},
 		{ timestamps: true }
 	)
