@@ -35,6 +35,7 @@ module.exports.Profile = model(
 				type: String,
 				required: true,
 			},
+			photo: String,
 		},
 		{ timestamps: true }
 	)
