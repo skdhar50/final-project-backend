@@ -10,7 +10,7 @@ module.exports.Category = model(
 			},
 			parent_id: {
 				type: Schema.Types.ObjectId,
-				ref: "Category",
+				ref: "Category", 
 			},
 			status: {
 				type: String,
