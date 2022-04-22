@@ -6,7 +6,7 @@ let carousel = {}
 carousel.createCarousel = async (req, res) => {
     const newCarousel = new Banner({
         ...req.body,
-        image_path: base64Decrypt(req.body.photo),
+        image_path: base64Decrypt(req.body.photo, 'SLIDE'),
         
     })
     try {
@@ -66,7 +66,10 @@ carousel.updateCarousel = async (req, res) => {
     
     try {
         const banner = await Carousel.findByIdAndUpdate(req.params.id,  {
-                $set: {...req.body}
+            $set: {
+                ...req.body,
+                image_path: base64Decrypt(req.body.photo, 'SLIDE'),
+            }
             },{new: true});
         res.json({
             data: {
