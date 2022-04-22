@@ -10,7 +10,7 @@ product.createProduct = async (req, res) => {
     if (req.body.hasOwnProperty('photos')) {
         let photos = [];
         req.body.photos.forEach((photo) => {
-            photos.push(base64Decrypt(photo))
+            photos.push(base64Decrypt(photo, 'PRODUCT'))
         })
         inputData = {
             ...req.body,
