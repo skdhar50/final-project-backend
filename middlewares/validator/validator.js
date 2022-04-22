@@ -173,7 +173,7 @@ validators.addBrandValidator = [
         .if(check('offer_limit').exists())
         .isInt()
         .withMessage('offer_limit must be an integer value'),
-    check('min_shopping_amount')
+    check('min_shopping_amount') 
         .isInt()
         .withMessage('min_shopping_amount must be an integer value'),
     check('status')
