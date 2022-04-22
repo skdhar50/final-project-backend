@@ -23,6 +23,11 @@ module.exports.Product = model(
 			size: String,
 			color: String,
 			weight: String,
+			status:{
+				type: String,
+				enum: ["active", "inactive", "discontinued"],
+				default: "active",
+			},
 		},
 		{ timestamps: true }
 	)

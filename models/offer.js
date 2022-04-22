@@ -30,7 +30,7 @@ module.exports.Offer = model(
 			products: [
 				{
 					type: Schema.Types.ObjectId,
-					ref: "Products",
+					ref: "Product", // products to product
 				},
 			],
 		},
