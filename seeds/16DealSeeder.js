@@ -18,7 +18,7 @@ async function factory() {
     let data = [];
     for (let i = 0; i < numberOfSeed; i++) {
         data.push({
-            "name": faker.random.arrayElement(dealers)._id,
+            "dealer": faker.random.arrayElement(dealers)._id,
             "deal_value": faker.datatype.number({ min: 100000, max: 500000 }),
             "products": [
                 {

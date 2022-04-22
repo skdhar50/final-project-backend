@@ -4,7 +4,7 @@ module.exports.Deal = model(
     "Deal",
     Schema(
         {
-            dealer_id: {
+            dealer: {
                 type: Schema.Types.ObjectId,
                 ref: "Dealer",
             },
@@ -25,7 +25,7 @@ module.exports.Deal = model(
                     category: [
                         {
                             type: Schema.Types.ObjectId,
-                            ref: "Brand",
+                            ref: "Category",
                         },
                     ],
                     quantity: {

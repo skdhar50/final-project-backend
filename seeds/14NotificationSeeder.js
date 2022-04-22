@@ -24,7 +24,7 @@ function factory() {
 
 function seed() {
     const data = factory();
-    // console.log(data);
+    console.log(data);
 
     Notification.insertMany(data, (err) => {
         console.log("Seeding: NotificationSeeder")

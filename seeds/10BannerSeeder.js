@@ -27,12 +27,12 @@ async function seed() {
     // console.log(data);
 
     Banner.insertMany(data, (err) => {
-        console.log("Seeding: BannerSeeder")
+        console.log("Seeding: EmployeeSeeder")
         if (err) {
             console.log(err);
             mongoose.disconnect();
         } else {
-            console.log("Seeded: BannerSeeder")
+            console.log("Seeded: EmployeeSeeder")
             mongoose.disconnect();
         }
     });

@@ -8,7 +8,7 @@ const numberOfSeed = 3;
 
 async function factory() {
     const categories = await Category.find();
-    console.log(categories);
+    // console.log(categories);
     let data = [];
     for (let i = 0; i < numberOfSeed; i++) {
         data.push({
@@ -16,7 +16,7 @@ async function factory() {
             "start_form": faker.date.between('2022-04-01T00:00:00.000Z', '2022-05-01T00:00:00.000Z'),
             "expired_in": faker.date.between('2022-06-01T00:00:00.000Z', '2022-09-01T00:00:00.000Z'),
             "discounted_amount": faker.datatype.number({ min: 200, max: 500 }),
-            "offer_limit": "",
+            "offer_limit": 1,
             "min_shopping_amount": faker.datatype.number({ min: 1000, max: 5000 }),
             "categories": [categories[0]._id],
             "brands": [],
