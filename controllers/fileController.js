@@ -11,7 +11,7 @@ controllers.getImage = (req, res) => {
             res.sendFile(filePath)
         } else {
             res.status(404).json({
-            message: "File not found!",
+            message: "File not found!", 
             error: true
         })
         }
