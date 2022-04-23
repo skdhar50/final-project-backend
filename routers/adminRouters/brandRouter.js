@@ -1,11 +1,11 @@
 const router = require("express").Router();
 const { brandList, showBrand, createBrand, updateBrand, removeBrand } = require("../../controllers/adminControllers/brandController");
-// const imageUpload = require('../../middlewares/imageUpload');
+const { addBrandValidator, updateBrandValidator, validationHandler } = require("../../middlewares/validator/validator");
 
 router.get('/', brandList);
-router.post('/',createBrand);
+router.post('/', addBrandValidator, validationHandler, createBrand);
 router.get('/:id', showBrand);
-router.put('/:id', updateBrand);
+router.put('/:id', updateBrandValidator, validationHandler, updateBrand);
 router.delete('/:id', removeBrand)
 
 module.exports = router;

@@ -1,6 +1,7 @@
 const { check, validationResult } = require('express-validator');
 const { Category } = require('../../models/category');
 const { Brand } = require('../../models/brand');
+const isBase64 = require('is-base64');
 
 let validators = {}
 validators.addProductValidators = [
@@ -42,6 +43,16 @@ validators.addProductValidators = [
     check('photos')
         .isLength({ min: 1 })
         .withMessage('Photo is required'),
+    check('photos.*')
+        .if(check('photos').exists())
+        .custom((value) => {
+            const base64 = isBase64(value, {mimeRequired: true });
+            if (base64) {
+                return true;
+            } else {
+                throw new Error('Invalid base64 string');
+            }
+        }),
     check('unitPrice')
         .isInt()
         .withMessage('Invalid unit price value'),
@@ -95,7 +106,7 @@ validators.updateProductValidators = [
                     throw new Error('Invalid brand ID!');
                 }
             } catch (err) {
-                throw new Error(err.message);
+                throw new Error('Invalid brand ID!');
             }
         }),
     check('quantity')
@@ -124,17 +135,16 @@ validators.updateProductValidators = [
         .withMessage('Invalid status value'),
 ];
 
-
-validators.productValidationHandler = (req, res, next)=>{
-    const errors = validationResult(req);
-    const mappedErrors = errors.mapped();
-    if (Object.keys(mappedErrors).length === 0) {
-        next();
-    } else {
-        res.status(500).json({
-            errors: mappedErrors,
-        })
-    }
-}
+validators.addPhotosValidators = [
+    check('photos.*')
+        .custom((value) => {
+            const base64 = isBase64(value, {mimeRequired: true });
+            if (base64) {
+                return true;
+            } else {
+                throw new Error('Invalid base64 string');
+            }
+        }),
+];
 
 module.exports = validators;

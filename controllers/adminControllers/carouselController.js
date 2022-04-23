@@ -1,12 +1,12 @@
 const { Carousel } = require('../../models/carousel');
-const {base64Decrypt} = require('../../utilities/base64');
+const {base64Decode} = require('../../utilities/base64');
 
 let carousel = {}
 
 carousel.createCarousel = async (req, res) => {
-    const newCarousel = new Banner({
+    const newCarousel = new Carousel({
         ...req.body,
-        image_path: base64Decrypt(req.body.photo, 'SLIDE'),
+        image_path: base64Decode(req.body.photo, 'CAROUSEL'),
         
     })
     try {
@@ -68,7 +68,7 @@ carousel.updateCarousel = async (req, res) => {
         const banner = await Carousel.findByIdAndUpdate(req.params.id,  {
             $set: {
                 ...req.body,
-                image_path: base64Decrypt(req.body.photo, 'SLIDE'),
+                image_path: base64Decode(req.body.photo, 'CAROUSEL'),
             }
             },{new: true});
         res.json({

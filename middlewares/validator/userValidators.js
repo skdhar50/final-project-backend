@@ -1,4 +1,5 @@
 const { check, validationResult } = require('express-validator');
+const isBase64 = require('is-base64');
 const { Profile } = require('../../models/profile');
 const { User } = require('../../models/user');
 
@@ -63,34 +64,41 @@ validators.addUserValidators = [
         .if(check('profile').exists())
         .isLength({ min: 1 })
         .withMessage('City is required!'),
-     check('profile.state')
+    check('profile.state')
         .if(check('profile').exists())
         .isLength({ min: 1 })
         .withMessage('State is required!'),
-      check('profile.postalCode')
+    check('profile.postalCode')
         .if(check('profile').exists())
         .isLength({ min: 1 })
         .withMessage('Postal code is required!')
         .isInt()
         .withMessage('integers only!'),
-      check('profile.country')
+    check('profile.country')
         .if(check('profile').exists())
         .isLength({ min: 1 })
         .withMessage('Country is required!'),
-      check('profile.photo')
+    check('profile.photo')
         .if(check('profile').exists())
-        .isLength({ min: 1 })
-        .withMessage('Profile photo is required!'),
+        .custom((value) => {
+            const base64 = isBase64(value, {mimeRequired: true });
+            if (base64) {
+                return true;
+            } else {
+                throw new Error('Invalid base64 string');
+            }
+        }),
 ];
 
 validators.updateUserValidators = [
     check('name')
-        .if(check('name').exists())
+        .optional()
+        .isLength({min:3})
         .isAlpha('en-US', { ignore: ' -' })
         .withMessage('Name must not contain anything other than alphabet')
         .trim(),
     check('email')
-        .if(check('email').exists())
+        .optional()
         .isEmail()
         .withMessage("Invalid email address")
         .trim()
@@ -105,7 +113,7 @@ validators.updateUserValidators = [
             }
         }),
     check('password')
-        .if(check('password').exists())
+        .optional()
         .isStrongPassword()
         .withMessage('Password must be at least 8 characters long & should contain at least 1 lowercase, 1 uppercase, 1 number & 1 symbol')
         .custom((value, { req }) => {
@@ -116,16 +124,18 @@ validators.updateUserValidators = [
             }
         }),
     check('status')
-        .if(check('status').exists())
-        .isIn(['active', 'inactive']),
+        .optional()
+        .isIn(['active', 'inactive'])
+        .withMessage('Invalid status!'),
     check('role')
-        .if(check('role').exists())
-        .isIn(['admin', 'user']),
+        .optional()
+        .isIn(['admin', 'user'])
+        .withMessage('Invalid status!'),
 ];
 
 validators.updateProfileValidators = [
     check('phone')
-        .if(check('phone').exists())
+        .optional()
         .isMobilePhone("bn-BD", {
             strictMode: true,
         })
@@ -141,23 +151,21 @@ validators.updateProfileValidators = [
             }
         }),
     check('postalCode')
-        .if(check('postalCode').exists())
+        .optional()
         .isLength({ min: 4 })
         .withMessage('Postal code is required!')
         .isInt()
         .withMessage('integers only!'),
+    check('photo')
+        .optional()
+        .custom((value) => {
+            const base64 = isBase64(value, {mimeRequired: true });
+            if (base64) {
+                return true;
+            } else {
+                throw new Error('Invalid base64 string');
+            }
+        }),
 ];
-
-validators.userValidationHandler = (req, res, next)=>{
-    const errors = validationResult(req);
-    const mappedErrors = errors.mapped();
-    if (Object.keys(mappedErrors).length === 0) {
-        next();
-    } else {
-        res.status(500).json({
-            errors: mappedErrors,
-        })
-    }
-}
 
 module.exports = validators;

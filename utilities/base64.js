@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const base64Decrypt = (base64String, subName="IMG") => {
+const base64Decode = (base64String, subName="IMG") => {
 
     const ext = base64String.split(';')[0].split('/')[1];
     if (ext) {
@@ -17,4 +17,4 @@ const base64Decrypt = (base64String, subName="IMG") => {
     }
 }
 
-module.exports.base64Decrypt = base64Decrypt;
+module.exports.base64Decode = base64Decode;
