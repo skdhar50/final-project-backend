@@ -1,5 +1,5 @@
 const { Product } = require('../../models/product');
-const {base64Decrypt} = require('../../utilities/base64');
+const {base64Decode} = require('../../utilities/base64');
 const { totalSale } = require('../../utilities/productHelpers');
 
 let product = {}
@@ -10,7 +10,7 @@ product.createProduct = async (req, res) => {
     if (req.body.hasOwnProperty('photos')) {
         let photos = [];
         req.body.photos.forEach((photo) => {
-            photos.push(base64Decrypt(photo, 'PRODUCT'))
+            photos.push(base64Decode(photo, 'PRODUCT'))
         })
         inputData = {
             ...req.body,

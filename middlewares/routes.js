@@ -5,8 +5,10 @@ const productRouter = require("../routers/productRouter");
 const cartRouter = require("../routers/cartRouter");
 const profileRouter = require("../routers/profileRouter");
 const offerRouter = require("../routers/offerRouter");
+const fileRouter = require("../routers/fileRouter");
 
 module.exports = (app) => {
+    app.use('/file', fileRouter);
     app.use('/api/user', userRouter);
     app.use('/api/category', categoryRouter);
     app.use('/api/product', productRouter);

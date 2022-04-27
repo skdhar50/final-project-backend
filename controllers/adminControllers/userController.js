@@ -2,7 +2,7 @@
 const { User } = require('../../models/user');
 const { Profile } = require('../../models/profile');
 const bcrypt = require('bcrypt');
-const { base64Decrypt } = require('../../utilities/base64');
+const { base64Decode } = require('../../utilities/base64');
 const mongoose = require('mongoose')
 
 let user = {}
@@ -28,7 +28,7 @@ user.createUser = async (req, res) => {
         if (req.body.hasOwnProperty('profile')) {
             const newProfile = new Profile({
                 ...req.body.profile,
-                photo: base64Decrypt(req.body.profile.photo, "USER"),
+                photo: base64Decode(req.body.profile.photo, "USER"),
                 "user": user._id,
             });
             profile = await newProfile.save();
@@ -155,11 +155,12 @@ user.updateUser = async (req, res) => {
     }
 }
 user.updateProfile = async (req, res) => {
+    delete req.body.user;
     try {
         const findProfile = await Profile.findOneAndUpdate({ user: req.params.id });
         if (findProfile) {
             if (req.body.hasOwnProperty('photo')) {
-                req.body.photo = base64Decrypt(req.body.photo, "USER");
+                req.body.photo = base64Decode(req.body.photo, "USER");
             }
             const profile = await Profile.findByIdAndUpdate(
                 findProfile._id,
@@ -176,7 +177,7 @@ user.updateProfile = async (req, res) => {
             const newProfile = new Profile({
                 ...req.body,
                 user: req.params.id,
-                photo: base64Decrypt(req.body.photo)
+                photo: base64Decode(req.body.photo)
             });
             res.json({
                 data: {

@@ -1,13 +1,14 @@
 const router = require("express").Router();
 const { productList, showProduct, createProduct, updateProduct, removeProduct, addPhotos, removePhoto } = require("../../controllers/adminControllers/productController");
-const { addProductValidators, productValidationHandler, updateProductValidators } = require("../../middlewares/validator/productValidator");
+const { addProductValidators, updateProductValidators, addPhotosValidators } = require("../../middlewares/validator/productValidator");
+const { validationHandler } = require("../../middlewares/validator/validator");
 
 router.get('/', productList);
-router.post('/', addProductValidators, productValidationHandler, createProduct);
+router.post('/', addProductValidators, validationHandler, createProduct);
 router.get('/:id', showProduct);
-router.put('/:id', updateProductValidators, productValidationHandler, updateProduct);
+router.put('/:id', updateProductValidators, validationHandler, updateProduct);
 router.delete('/:id', removeProduct);
-router.put('/add-photos/:id', addPhotos);
+router.put('/add-photos/:id', addPhotosValidators, validationHandler, addPhotos);
 router.delete('/remove-photo/:id/:photo', removePhoto);
 
 module.exports = router;

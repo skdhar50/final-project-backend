@@ -1,11 +1,11 @@
 const { Banner } = require('../../models/banner');
-const {base64Decrypt} = require('../../utilities/base64');
+const {base64Decode} = require('../../utilities/base64');
 
 let banner = {}
 
 banner.createBanner = async (req, res) => {
     const newBanner = new Banner({
-        image_path: base64Decrypt(req.body.photo),
+        image_path: base64Decode(req.body.photo, 'BANNER'),
         link_to: req.body.link_to,
         size: req.body.size
         
@@ -73,7 +73,7 @@ banner.updateBanner = async (req, res) => {
             data: {
                 banner,
             },
-            message: "Banner was updarted suceesfully!",
+            message: "Banner was updated suceesfully!",
             error: false
         })
     }catch(err){

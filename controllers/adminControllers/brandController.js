@@ -1,6 +1,6 @@
 const { Brand } = require('../../models/brand');
 const mongoose = require('mongoose');
-const {base64Decrypt} = require('../../utilities/base64');
+const {base64Decode} = require('../../utilities/base64');
 
 let brand = {}
 
@@ -27,7 +27,7 @@ brand.createBrand = async (req, res) => {
     if (req.body.hasOwnProperty('icon')) {
         inputData = {
             "name": req.body.name,
-            "icon": base64Decrypt(req.body.icon, 'BRAND'),
+            "icon": base64Decode(req.body.icon, 'BRAND'),
         }
     } else {
         inputData = {
@@ -95,7 +95,7 @@ brand.updateBrand = async (req, res) => {
         inputData = {
             "name": req.body.name,
             "status": req.body.status,
-            "icon": base64Encrypt(req.body.icon),
+            "icon": base64Decode(req.body.icon, 'BRAND'),
         }
     } else {
         inputData = {

@@ -25,6 +25,8 @@ review.reviewList = async (req, res) => {
 
 
 review.updateReview = async (req, res) => {
+    delete req.body.user;
+    delete req.body.product;
     try {
         const review = await Review.findByIdAndUpdate(
             req.params.id,
