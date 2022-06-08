@@ -8,7 +8,7 @@ router.post('/', addProductValidators, validationHandler, createProduct);
 router.get('/:id', showProduct);
 router.put('/:id', updateProductValidators, validationHandler, updateProduct);
 router.delete('/:id', removeProduct);
-router.put('/add-photos/:id', addPhotosValidators, validationHandler, addPhotos);
+router.post('/add-photos/:id', addPhotosValidators, validationHandler, addPhotos);
 router.delete('/remove-photo/:id/:photo', removePhoto);
 
 module.exports = router;

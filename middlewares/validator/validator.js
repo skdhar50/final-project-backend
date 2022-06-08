@@ -924,7 +924,7 @@ validators.updateReviewValidator = [
         .withMessage('rating is required')
 ];
 
-validators.validationHandler = (req, res, next)=>{
+validators.validationHandler = (req, res, next) => {
     const errors = validationResult(req);
     const mappedErrors = errors.mapped();
     if (Object.keys(mappedErrors).length === 0) {

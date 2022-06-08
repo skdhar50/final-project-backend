@@ -136,7 +136,7 @@ product.addPhotos = async (req, res) => {
 
         let photos = [...selectProduct.photos];
         req.body.photos.forEach(photo => {
-            photos.push(base64Encrypt(photo))
+            photos.push(base64Decode(photo))
         })
 
         const product = await Product.findByIdAndUpdate(
@@ -147,7 +147,7 @@ product.addPhotos = async (req, res) => {
             { new: true });
         res.json({
             data: {
-                product,
+                photos:product.photos,
             },
             message: "Photos were added succesfully!",
             error: false
@@ -164,7 +164,7 @@ product.removePhoto = async (req, res) => {
     try {
         const selectProduct = await Product.findById(req.params.id);
 
-        let photos = selectProduct.photos.filter(item => item !== "storages/images/"+req.params.photo);
+        let photos = selectProduct.photos.filter(item => item !== req.params.photo);
 
         const product = await Product.findByIdAndUpdate(
             req.params.id,
@@ -174,7 +174,7 @@ product.removePhoto = async (req, res) => {
             { new: true });
         res.json({
             data: {
-                product,
+                photos:product.photos,
             },
             message: "Photo was removed succesfully!",
             error: false
