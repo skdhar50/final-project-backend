@@ -39,6 +39,7 @@ module.exports.Order = model(
 					required: true,
 				},
 			},
+			
 			paymentStatus: {
 				type: String,
 				enum: ["pending", "complete"],

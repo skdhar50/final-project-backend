@@ -15,18 +15,18 @@ module.exports.Offer = model(
 				enum: ["active", "inactive"],
 				default: "active",
 			},
-			category: [
-				{
-					type: Schema.Types.ObjectId,
-					ref: "Category",
-				},
-			],
-			brand: [
-				{
-					type: Schema.Types.String,
-					ref: "Brand",
-				},
-			],
+			// category: [
+			// 	{
+			// 		type: Schema.Types.ObjectId,
+			// 		ref: "Category",
+			// 	},
+			// ],
+			// brand: [
+			// 	{
+			// 		type: Schema.Types.String,
+			// 		ref: "Brand",
+			// 	},
+			// ],
 			products: [
 				{
 					type: Schema.Types.ObjectId,

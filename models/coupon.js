@@ -28,18 +28,18 @@ module.exports.Coupon = model(
                 type: Number,
                 required: true,
             },
-            categories: [
-                {
-                    type: Schema.Types.ObjectId,
-                    ref: "Category",
-                },
-            ],
-            brands: [
-                {
-                    type: Schema.Types.ObjectId,
-                    ref: "Brand",
-                },
-            ],
+            // categories: [
+            //     {
+            //         type: Schema.Types.ObjectId,
+            //         ref: "Category",
+            //     },
+            // ],
+            // brands: [
+            //     {
+            //         type: Schema.Types.ObjectId,
+            //         ref: "Brand",
+            //     },
+            // ],
             products: [
                 {
                     type: Schema.Types.ObjectId,

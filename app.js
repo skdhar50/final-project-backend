@@ -5,11 +5,11 @@ const app = require("express")();
 require("./middlewares/")(app);
 require("./middlewares/routes")(app);
 
-app.use('/test', (req, res) => {
-    res.json({
-        "m": "mm",
-    })
-})
+app.use("/test", (req, res) => {
+	res.json({
+		m: "mm",
+	});
+});
 
 app.use(error);
 

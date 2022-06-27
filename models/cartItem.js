@@ -13,6 +13,10 @@ const CartItemSchema = Schema(
 			min: 1,
 			max: 5,
 		},
+		isSelected: {
+			type: Boolean,
+			default: false,
+		},
 		user: {
 			type: Schema.Types.ObjectId,
 			ref: "User",
