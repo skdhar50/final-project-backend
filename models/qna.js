@@ -1,7 +1,7 @@
 const { Schema, model } = require("mongoose");
 
-module.exports.Review = model(
-	"Review",
+module.exports.Qna = model(
+	"Qna",
 	Schema(
 		{
 			user: {
@@ -12,9 +12,16 @@ module.exports.Review = model(
 				type: Schema.Types.ObjectId,
 				ref: "Product",
 			},
-			review: String,
-			rating: String,
-			photos: [String]
+			question: {
+				type: String,
+				required: true,
+			},
+			answer: {
+				type: String,
+			},
+			answeredAt: {
+				type: Date,
+			},
 		},
 		{ timestamps: true }
 	)
