@@ -32,7 +32,7 @@ module.exports.filterProducts = async (req, res) => {
 	// Fatching the data from the database using the request body
 	const products = await Product.find({ ...args })
 		.sort({ [sortBy]: order })
-		.limit(limit);
+		.limit(limit).populate("category").populate("brand");
 
 	// Sending back the results
 	return res.status(200).send(products);
