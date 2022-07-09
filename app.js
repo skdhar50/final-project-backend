@@ -1,6 +1,7 @@
 require("express-async-errors");
 const error = require("./middlewares/error");
 const app = require("express")();
+const express = require("express");
 
 require("./middlewares/")(app);
 require("./middlewares/routes")(app);
@@ -12,5 +13,6 @@ app.use("/test", (req, res) => {
 });
 
 app.use(error);
+app.use('/storages', express.static('storages'))
 
 module.exports = app;

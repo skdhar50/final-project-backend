@@ -3,32 +3,41 @@ const { CartItem } = require("../models/cartItem");
 const { ShippingAddress } = require("../models/shippingAddress");
 const _ = require("lodash");
 
+function getTransectionId() {
+	let result = "";
+	let characters =
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	let charactersLength = characters.length;
+	for (let i = 0; i < 5; i++) {
+		result += characters.charAt(Math.floor(Math.random() * charactersLength));
+	}
+	return result;
+}
+
+module.exports.getOrders = async (req, res) => {
+	const orders = await Order.find({ user: req.user._id })
+		.sort({ "createdAt": -1 })
+		.populate("cartItem.product");
+
+	return res.status(200).send(orders);
+};
+
 module.exports.placeOrder = async (req, res) => {
 	const selectedProducts = await CartItem.find({
 		user: req.user._id,
 		isSelected: true,
 	});
 
-	// console.log(...selectedProducts)
-
-	// console.log(req.body)
-	// console.log(selectedProducts)
-	// const selectedShippingAddress = ShippingAddress.findOne({
-	// 	user: req.user._id,
-	// 	_id: req.body.shipping,
-	// });
-
 	const temp = req.body.shipping;
 	const paymentMethod = req.body.paymentMethod;
 	let tempCart = [];
 
-	selectedProducts.forEach(prouct => {
-		tempCart.push(
-			_.pick(prouct, ["product", "count", "user"])
-		)
-	})
+	selectedProducts.forEach((product) => {
+		tempCart.push(_.pick(product, ["product", "count", "user", "isSelected"]));
+	});
 
-	console.log(tempCart)
+	console.log(tempCart);
+	console.log(temp);
 
 	const selectedShippingAddress = {
 		phone: temp.phone,
@@ -39,19 +48,19 @@ module.exports.placeOrder = async (req, res) => {
 		address2: temp.fullAddress,
 	};
 
-	// console.log(selectedShippingAddress, paymentMethod)
-
 	const newOrder = new Order({
 		cartItem: tempCart,
 		address: selectedShippingAddress,
+		transaction_id: getTransectionId(),
 		payment_method: paymentMethod,
 		user: req.user._id,
 		discount: req.body.discount,
 	});
 
-	// console.log(newOrder)
+	console.log(newOrder);
+
 	await newOrder.save();
-	// console.log("Here");
+	console.log("here");
 	await CartItem.deleteMany({ user: req.user._id, isSelected: true });
 
 	return res.status(200).send("Order created successfully");

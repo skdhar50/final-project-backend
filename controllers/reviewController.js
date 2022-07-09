@@ -1,9 +1,34 @@
 const { Review } = require("../models/review");
 const formidable = require("formidable");
 const fs = require("fs");
+const path = require("path");
+const _ = require("lodash");
 
 module.exports.getReviews = async (req, res) => {
-	const reviews = await Review.find({ product: req.params.id });
+	const reviews = await Review.find({ product: req.params.id }).populate(
+		"user"
+	);
+	let tempReviews = reviews.map((review) =>
+		_.pick(review, [
+			"_id",
+			"user",
+			"product",
+			"review",
+			"rating",
+			"photos",
+			"createdAt",
+		])
+	);
+
+	tempReviews.map((review) =>
+		review?.photos?.forEach((photo, index) =>
+			path.resolve(`${path.join(__dirname, "../storages/reviews")}/${photo}`)
+		)
+	);
+
+	if (tempReviews.length > 0) {
+		console.log(tempReviews);
+	}
 
 	return res.status(200).send(reviews);
 };
@@ -40,7 +65,7 @@ module.exports.postReview = async (req, res) => {
 				"." +
 				file.mimetype.split("/")[1];
 
-			photos.push(file.filepath);
+			photos.push(file.newFilename + "." + file.mimetype.split("/")[1]);
 		})
 		.on("file", function (field, file) {
 			//On file received
@@ -68,4 +93,17 @@ module.exports.postReview = async (req, res) => {
 		});
 
 	form.parse(req);
+};
+
+module.exports.getReviewImage = async (req, res) => {
+	const imagePath = path.resolve(
+		`${path.join(__dirname, "..storages/reviews")}/${req.params.name}`
+	);
+	const fileCheck = fs.existsSync(filePath);
+
+	if (fileCheck) {
+		return res.status(200).send(imagePath);
+	} else {
+		return res.status(404).send("No image found");
+	}
 };
