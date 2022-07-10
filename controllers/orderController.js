@@ -28,8 +28,6 @@ module.exports.placeOrder = async (req, res) => {
 		)
 	})
 
-	console.log(tempCart)
-
 	const selectedShippingAddress = {
 		phone: temp.phone,
 		city: temp.city,
@@ -38,8 +36,6 @@ module.exports.placeOrder = async (req, res) => {
 		address1: temp.area,
 		address2: temp.fullAddress,
 	};
-
-	// console.log(selectedShippingAddress, paymentMethod)
 
 	const newOrder = new Order({
 		cartItem: tempCart,
