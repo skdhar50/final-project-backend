@@ -2,9 +2,9 @@ const { response } = require("express");
 const { Qna } = require("../models/qna");
 
 module.exports.getQna = async (req, res) => {
-	const questions = await Qna.find({ product: req.params.id });
+	const questions = await Qna.find({ product: req.params.id }).populate("user");
 
-    return response.status(200).send(questions);
+    return res.status(200).send(questions);
 };
 
 module.exports.createQuestion = async (req, res) => {

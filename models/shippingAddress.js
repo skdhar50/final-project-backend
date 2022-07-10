@@ -13,7 +13,7 @@ module.exports.ShippingAddress = model(
 			phone2: { type: String },
 			city: { type: String, required: true },
 			area: { type: String, required: true },
-			zone: { type: String, required: true },
+			zone: { type: String },
 			fullAddress: { type: String, required: true },
 		},
 		{ timestamps: true }
