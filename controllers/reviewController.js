@@ -1,15 +1,26 @@
 const { Review } = require("../models/review");
-const formidable = require("formidable");
-const fs = require("fs");
 const path = require("path");
 const _ = require("lodash");
 const upload = require("../middlewares/multer");
 const multer = require("multer");
 
+module.exports.isReviewed = async (req, res) => {
+	const user = await Review.find({
+		product: req.params.product,
+		user: req.user._id,
+	});
+
+	if (user.length > 0) {
+		return res.send(true);
+	} else {
+		return res.send(false);
+	}
+};
+
 module.exports.getReviews = async (req, res) => {
-	const reviews = await Review.find({ product: req.params.id }).sort({createdAt : -1}).populate(
-		"user"
-	);
+	const reviews = await Review.find({ product: req.params.id })
+		.sort({ createdAt: -1 })
+		.populate("user");
 	let tempReviews = reviews.map((review) =>
 		_.pick(review, [
 			"_id",

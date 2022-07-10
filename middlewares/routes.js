@@ -12,6 +12,7 @@ const wishlistRouter = require("../routers/wishlistRouter");
 const reviewRouter = require("../routers/reviewRouter");
 const qnaRouter = require("../routers/qnaRouter");
 const orderRouter = require("../routers/orderRouter");
+const cityLocationRouter = require("../routers/cityLocationRouter");
 
 module.exports = (app) => {
 	// app.use('/file', fileRouter);
@@ -23,6 +24,7 @@ module.exports = (app) => {
 	// app.use('/api/profile', profileRouter);
 	// app.use('/api/offer', offerRouter);
 	// app.use('/api/admin', adminRoutes);
+	app.use("/api/cityLocation", cityLocationRouter);
 	app.use("/api/order", orderRouter);
 	app.use("/api/shippingAddress", shippingAddressRouter);
 	app.use("/api/wishlist", wishlistRouter);
