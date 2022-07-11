@@ -8,6 +8,16 @@ module.exports.allProducts = async (req, res) => {
 	return res.status(200).send(products);
 };
 
+module.exports.searchProducts = async (req, res) => {
+	const products = await Product.find({
+		name: { $regex: req.params.key, $options: "i" },
+	})
+		.select({ name: 1, _id: 1 })
+		.limit(10);
+
+	return res.status(200).send(products);
+};
+
 module.exports.productDetails = async (req, res) => {
 	const product = await Product.find({ _id: req.params.id })
 		.populate("category", "name")
