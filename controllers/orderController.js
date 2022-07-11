@@ -14,6 +14,14 @@ function getTransectionId() {
 	return result;
 }
 
+module.exports.getOrderDetails = async (req, res) => {
+	const order = await Order.find({ _id: req.params.id }).populate(
+		"cartItem.product"
+	);
+
+	return res.status(200).send(order);
+};
+
 module.exports.getOrders = async (req, res) => {
 	const orders = await Order.find({ user: req.user._id })
 		.sort({ createdAt: -1 })
