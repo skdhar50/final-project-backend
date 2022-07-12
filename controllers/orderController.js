@@ -27,7 +27,7 @@ module.exports.getOrders = async (req, res) => {
 		.sort({ createdAt: -1 })
 		.populate("cartItem.product");
 
-	return res.status(200).send(orders);
+	return res.status(200).send({ data: orders });
 };
 
 module.exports.placeOrder = async (req, res) => {
@@ -43,9 +43,6 @@ module.exports.placeOrder = async (req, res) => {
 	selectedProducts.forEach((product) => {
 		tempCart.push(_.pick(product, ["product", "count", "user", "isSelected"]));
 	});
-
-	console.log(tempCart);
-	console.log(temp);
 
 	const selectedShippingAddress = {
 		phone: temp.phone,
@@ -65,11 +62,10 @@ module.exports.placeOrder = async (req, res) => {
 		discount: req.body.discount,
 	});
 
-	console.log(newOrder);
-
 	await newOrder.save();
-	console.log("here");
 	await CartItem.deleteMany({ user: req.user._id, isSelected: true });
 
-	return res.status(200).send("Order created successfully");
+	return res
+		.status(200)
+		.send({ message: "Order created successfully", type: "success" });
 };

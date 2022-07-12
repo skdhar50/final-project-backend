@@ -36,5 +36,5 @@ module.exports.getCategories = async (req, res) => {
 		}
 	}
 
-	return res.status(200).send(parents);
+	return res.status(200).send({ data: parents });
 };

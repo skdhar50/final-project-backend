@@ -11,9 +11,9 @@ module.exports.isReviewed = async (req, res) => {
 	});
 
 	if (user.length > 0) {
-		return res.send(true);
+		return res.send({ data: true });
 	} else {
-		return res.send(false);
+		return res.send({ data: false });
 	}
 };
 
@@ -39,7 +39,7 @@ module.exports.getReviews = async (req, res) => {
 		)
 	);
 
-	return res.status(200).send(tempReviews);
+	return res.status(200).send({ data: tempReviews });
 };
 
 module.exports.postReview = async (req, res) => {
@@ -64,6 +64,8 @@ module.exports.postReview = async (req, res) => {
 		});
 
 		await review.save();
-		return res.status(200).send("Review created successfully!");
+		return res
+			.status(200)
+			.send({ message: "Review created successfully!", type: "success" });
 	});
 };

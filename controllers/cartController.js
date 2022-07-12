@@ -8,7 +8,7 @@ module.exports.getCartItems = async (req, res) => {
 	);
 	// .populate("user", "name");
 
-	return res.status(200).send(items);
+	return res.status(200).send({ data: items });
 };
 
 module.exports.selectAllCartItems = async (req, res) => {
@@ -17,7 +17,7 @@ module.exports.selectAllCartItems = async (req, res) => {
 		{ isSelected: req.body.flag }
 	);
 
-	return res.status(200).send(items);
+	return res.status(200).send({ data: items });
 };
 
 module.exports.selectSingleItem = async (req, res) => {
@@ -26,12 +26,16 @@ module.exports.selectSingleItem = async (req, res) => {
 		{ isSelected: req.body.flag }
 	);
 
-	return res.status(200).send(item);
+	return res.status(200).send({ data: item });
 };
 
 module.exports.removeCartItem = async (req, res) => {
 	const cartItem = await CartItem.findByIdAndDelete(req.params.id);
-	res.send(cartItem);
+	return res.send({
+		data: cartItem,
+		message: "Item deleted successfully!",
+		type: "success",
+	});
 };
 
 module.exports.addCartItem = async (req, res) => {
@@ -43,7 +47,9 @@ module.exports.addCartItem = async (req, res) => {
 	});
 
 	if (item) {
-		return res.status(400).send("Item already in cart");
+		return res
+			.status(400)
+			.send({ message: "Item already in cart", type: "warn" });
 	}
 
 	const cartItem = new CartItem({
@@ -52,7 +58,9 @@ module.exports.addCartItem = async (req, res) => {
 	});
 
 	await cartItem.save();
-	return res.status(200).send("Item saved to cart successfully!");
+	return res
+		.status(200)
+		.send({ message: "Item saved to cart successfully!", type: "success" });
 };
 
 module.exports.updateCartItem = async (req, res) => {
@@ -60,12 +68,16 @@ module.exports.updateCartItem = async (req, res) => {
 
 	await CartItem.updateOne({ _id: _id, user: req.user._id }, { count: count });
 
-	return res.status(200).send("Item updated successfully!");
+	return res
+		.status(200)
+		.send({ message: "Item updated successfully!", type: "success" });
 };
 
 module.exports.deleteCartItem = async (req, res) => {
 	const id = req.params.id;
 
 	await CartItem.deleteOne({ _id: id, user: req.user._id });
-	return res.status(200).send("Item deleted successfully!");
+	return res
+		.status(200)
+		.send({ message: "Item deleted successfully!", type: "success" });
 };

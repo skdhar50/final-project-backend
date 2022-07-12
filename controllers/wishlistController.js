@@ -7,7 +7,7 @@ module.exports.getWishlist = async (req, res) => {
 		"name description photos"
 	);
 
-	return res.status(200).send(wishlist);
+	return res.status(200).send({ data: wishlist });
 };
 
 module.exports.addToWishlist = async (req, res) => {
@@ -24,9 +24,13 @@ module.exports.addToWishlist = async (req, res) => {
 				{ user: req.user._id },
 				{ $push: { products: req.params.id } }
 			);
-			return res.status(200).send("Product added successfully");
+			return res
+				.status(200)
+				.send({ message: "Product added successfully", type: "success" });
 		} else {
-			return res.status(401).send("Product is already added");
+			return res
+				.status(401)
+				.send({ message: "Product is already added", type: "warn" });
 		}
 	} else {
 		const newWishlist = new WishList({
@@ -35,7 +39,9 @@ module.exports.addToWishlist = async (req, res) => {
 		});
 
 		await newWishlist.save();
-		return res.status(200).send("Product added successfully");
+		return res
+			.status(200)
+			.send({ message: "Product added successfully", type: "success" });
 	}
 };
 
@@ -54,23 +60,26 @@ module.exports.removeFromWishlist = async (req, res) => {
 		} else {
 			await WishList.deleteOne({ user: req.user._id });
 		}
-		return res.status(200).send("Product removed successfully");
+		return res
+			.status(200)
+			.send({ message: "Product removed successfully", type: "success" });
 	} else {
-		return res.status(404).send("Product not found");
+		return res
+			.status(404)
+			.send({ message: "Product not found", type: "error" });
 	}
 };
 
 module.exports.moveToCart = async (req, res) => {
-	const product = req.params.id;
 	const isCartItem = await CartItem.findOne({
 		user: req.user._id,
 		product: req.params.id,
 	});
 
-	console.log(isCartItem);
-
-	if(isCartItem) {
-		return res.status(400).send("Item already in cart");
+	if (isCartItem) {
+		return res
+			.status(400)
+			.send({ message: "Item already in cart", type: "warn" });
 	}
 
 	const cartItem = new CartItem({
@@ -79,5 +88,7 @@ module.exports.moveToCart = async (req, res) => {
 	});
 
 	await cartItem.save();
-	return res.status(200).send("Item moved to cart successfully!");
+	return res
+		.status(200)
+		.send({ message: "Item moved to cart successfully!", type: "success" });
 };

@@ -5,7 +5,7 @@ module.exports.allProducts = async (req, res) => {
 		.populate("category", "name")
 		.populate("brand", "name");
 
-	return res.status(200).send(products);
+	return res.status(200).send({data: products});
 };
 
 module.exports.searchProducts = async (req, res) => {
@@ -15,7 +15,7 @@ module.exports.searchProducts = async (req, res) => {
 		.select({ name: 1, _id: 1 })
 		.limit(10);
 
-	return res.status(200).send(products);
+	return res.status(200).send({data: products});
 };
 
 module.exports.productDetails = async (req, res) => {
@@ -23,7 +23,7 @@ module.exports.productDetails = async (req, res) => {
 		.populate("category", "name")
 		.populate("brand", "name");
 
-	return res.status(200).send(product);
+	return res.status(200).send({data: product});
 };
 
 module.exports.filterProducts = async (req, res) => {
@@ -55,5 +55,5 @@ module.exports.filterProducts = async (req, res) => {
 		.populate("brand");
 
 	// Sending back the results
-	return res.status(200).send(products);
+	return res.status(200).send({data: products});
 };
