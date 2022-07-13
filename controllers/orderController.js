@@ -19,7 +19,7 @@ module.exports.getOrderDetails = async (req, res) => {
 		"cartItem.product"
 	);
 
-	return res.status(200).send(order);
+	return res.status(200).send({ data: order });
 };
 
 module.exports.getOrders = async (req, res) => {
