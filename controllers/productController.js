@@ -2,10 +2,17 @@ const { Product } = require("../models/product");
 
 module.exports.allProducts = async (req, res) => {
 	const products = await Product.find()
+		.limit(20)
 		.populate("category", "name")
 		.populate("brand", "name");
 
-	return res.status(200).send({data: products});
+	return res.status(200).send({ data: products });
+};
+
+module.exports.getPageCount = async (req, res) => {
+	const pageCount = await Product.countDocuments();
+
+	return res.status(200).send({ data: Math.ceil(pageCount / 20) });
 };
 
 module.exports.searchProducts = async (req, res) => {
@@ -15,7 +22,7 @@ module.exports.searchProducts = async (req, res) => {
 		.select({ name: 1, _id: 1 })
 		.limit(10);
 
-	return res.status(200).send({data: products});
+	return res.status(200).send({ data: products });
 };
 
 module.exports.productDetails = async (req, res) => {
@@ -23,7 +30,7 @@ module.exports.productDetails = async (req, res) => {
 		.populate("category", "name")
 		.populate("brand", "name");
 
-	return res.status(200).send({data: product});
+	return res.status(200).send({ data: product });
 };
 
 module.exports.filterProducts = async (req, res) => {
@@ -35,7 +42,7 @@ module.exports.filterProducts = async (req, res) => {
 	// Setting the default values of request body
 	order = order === "desc" ? -1 : 1;
 	sortBy = sortBy ? sortBy : "_id";
-	limit = limit ? parseInt(limit) : 20;
+	limit = 20;
 	skip = skip ? parseInt(skip) : 0;
 
 	// Setting up the filter constraints
@@ -48,12 +55,15 @@ module.exports.filterProducts = async (req, res) => {
 	}
 
 	// Fatching the data from the database using the request body
+	const pages = await Product.find({ ...args }).countDocuments();
+
 	const products = await Product.find({ ...args })
 		.sort({ [sortBy]: order })
+		.skip(skip * limit)
 		.limit(limit)
 		.populate("category")
 		.populate("brand");
 
 	// Sending back the results
-	return res.status(200).send({data: products});
+	return res.status(200).send({ data: products, pages: Math.ceil(pages / 20) });
 };
