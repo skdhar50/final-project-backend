@@ -1,7 +1,7 @@
 const { Review } = require("../models/review");
 const path = require("path");
 const _ = require("lodash");
-const upload = require("../middlewares/multer");
+const upload = require("../middlewares/reviewMulter");
 const multer = require("multer");
 
 module.exports.isReviewed = async (req, res) => {
