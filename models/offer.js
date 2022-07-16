@@ -9,12 +9,13 @@ module.exports.Offer = model(
 			endDate: Date,
 			description: String,
 			discountAmount: Number,
-			limit: Number,
+			limit: Number, // Minimum amount to be shoped
 			status: {
 				type: String,
 				enum: ["active", "inactive"],
 				default: "active",
 			},
+			photo: String,
 			// category: [
 			// 	{
 			// 		type: Schema.Types.ObjectId,

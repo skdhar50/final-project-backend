@@ -10,6 +10,7 @@ module.exports.Order = model(
 				type: String,
 				unique: true,
 			},
+			order_id: String,
 			address: {
 				phone: {
 					type: String,
@@ -39,7 +40,7 @@ module.exports.Order = model(
 					required: true,
 				},
 			},
-			
+
 			paymentStatus: {
 				type: String,
 				enum: ["pending", "complete"],
