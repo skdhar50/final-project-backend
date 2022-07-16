@@ -1,4 +1,6 @@
 const { Coupon } = require('../../models/coupon');
+const { Product } = require('../../models/product');
+const { User } = require('../../models/user');
 
 let coupon = {};
 
@@ -9,7 +11,8 @@ coupon.couponList = async (req, res) => {
             .populate('categories', 'name')
             .populate('brands', 'name')
             .populate('products', 'name price')
-            .populate('users', 'name email');
+            .populate('users', 'name email')
+            .sort({ _id: -1 });
         res.json({
             data: {
                 coupons,
@@ -26,15 +29,51 @@ coupon.couponList = async (req, res) => {
 }
 coupon.showCoupon = async (req, res) => {
     try {
-        const coupon = await Coupon
-            .findById(req.params.id)
-            .populate('categories', 'name')
-            .populate('brands', 'name')
-            .populate('products', 'name price')
-            .populate('users', 'name email');
+        let coupon = await Coupon
+            .findById(req.params.id);
+            // .populate('categories', 'name')
+            // .populate('brands', 'name')
+            // .populate('products', 'name price')
+            // .populate('appliers', 'name email');
+        
+        
+        coupon.products = await Product.find({ '_id': { $in: coupon['products'] } })
+            .populate('brand', 'name')
+            .populate('category', 'name');
+        
+        coupon._doc.users = await User.aggregate([
+            {
+                $match: { _id: { $in: coupon['users'] } }
+            },
+            {
+                $lookup: {
+                    from: "profiles",
+                    localField: "_id",
+                    foreignField: "user",
+                    as: "profile",
+                },
+            },
+            {$unwind: "$profile" },
+        ]);
+        coupon._doc.appliers = await User.aggregate([
+            {
+                $match: { _id: { $in: coupon['appliers'] } }
+            },
+            {
+                $lookup: {
+                    from: "profiles",
+                    localField: "_id",
+                    foreignField: "user",
+                    as: "profile",
+                },
+            },
+            {$unwind: "$profile" },
+        ]);
+
+        
         res.json({
             data: {
-                coupon
+                coupon: coupon
             },
             message: "Successfully retrievied!",
             error: false,

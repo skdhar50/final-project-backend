@@ -54,6 +54,10 @@ user.userList = async (req, res) => {
     try {
         const users = await User.aggregate([
             {
+                $match: { role: "user" }
+            },
+            {
+                
                 $lookup: {
                 from: "profiles",
                 localField: "_id",
@@ -62,7 +66,7 @@ user.userList = async (req, res) => {
                 },
             },
             {$unwind: "$profile" },
-        ]);
+        ]).sort({ _id: -1 });
         res.json({
             data: {
                 users,
@@ -70,6 +74,23 @@ user.userList = async (req, res) => {
             message: "Suceesfully retrived!",
             error: false
         })
+    } catch (err) {
+        res.status(500).json({
+            message: "There was a server side error!",
+            error: true
+        })
+    }
+}
+user.adminList = async (req, res) => {
+    try {
+        const admins = await User.find({ role: 'admin' }).select({ "password": 0, "__v":0 }).sort({ _id: -1 });
+        res.json({
+            data: {
+                admins,
+            },
+            message: "Suceesfully retrived!",
+            error: false
+        });
     } catch (err) {
         res.status(500).json({
             message: "There was a server side error!",

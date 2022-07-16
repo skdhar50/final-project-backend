@@ -31,7 +31,7 @@ carousel.carouselList = async (req, res) => {
     try {
         res.json({
             data: {
-                carousel: await Carousel.find(),
+                carousel: await Carousel.find().sort({ _id: -1 }),
             },
             message: "Suceesfully retrived!",
             error: false

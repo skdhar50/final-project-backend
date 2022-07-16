@@ -8,7 +8,8 @@ order.orderList = async (req, res) => {
         const orders = await Order
             .find()
             .select({ "cartItem":  0})
-            .populate('user', 'name email');
+            .populate('user', 'name email')
+            .sort({ _id: -1 });
         
         res.json({
             data: {

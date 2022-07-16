@@ -7,7 +7,7 @@ notification.notificationList = async (req, res) => {
     try {
         res.json({
             data: {
-                notifications: await Notification.find(),
+                notifications: await Notification.find().sort({ _id: -1 }),
             },
             message: "Successfully retrievied!",
             error: false,

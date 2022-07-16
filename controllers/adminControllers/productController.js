@@ -1,4 +1,5 @@
 const { Product } = require('../../models/product');
+const { Review } = require('../../models/review');
 const {base64Decode} = require('../../utilities/base64');
 const { totalSale } = require('../../utilities/productHelpers');
 
@@ -46,7 +47,8 @@ product.productList = async (req, res) => {
         const products = await Product
             .find()
             .populate('category', 'name')
-            .populate('brand', 'name');
+            .populate('brand', 'name')
+            .sort({ _id: -1 });
         
         res.json({
             data:{
@@ -71,6 +73,9 @@ product.showProduct = async (req, res) => {
             .populate('category', 'name');
         
         product._doc.totalSale = await totalSale(req.params.id);
+        product._doc.reviews = await Review.where('product')
+            .equals(req.params.id)
+            .populate('user', 'name');
 
         res.json({
             data:{

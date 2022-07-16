@@ -6,7 +6,7 @@ employee.employeeList = async (req, res) => {
     try {
         res.json({
             data: {
-                employee: await Employee.find(),
+                employee: await Employee.find().sort({ _id: -1 }),
             },
             message: "Successfully retrievied!",
             error: false,
