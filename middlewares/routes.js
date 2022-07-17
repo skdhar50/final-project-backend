@@ -13,11 +13,12 @@ const reviewRouter = require("../routers/reviewRouter");
 const qnaRouter = require("../routers/qnaRouter");
 const orderRouter = require("../routers/orderRouter");
 const cityLocationRouter = require("../routers/cityLocationRouter");
+const paymentRouter = require("../routers/paymentRouter");
 
 module.exports = (app) => {
 	// app.use('/file', fileRouter);
 	app.use("/api/user", userRouter);
-	app.use('/api/category', categoryRouter);
+	app.use("/api/category", categoryRouter);
 	app.use("/api/product", productRouter);
 	app.use("/api/cart", cartRouter);
 	app.use("/api/brand", brandRouter);
@@ -30,4 +31,5 @@ module.exports = (app) => {
 	app.use("/api/wishlist", wishlistRouter);
 	app.use("/api/reviews", reviewRouter);
 	app.use("/api/qna", qnaRouter);
+	app.use("/api/payment", paymentRouter);
 };
