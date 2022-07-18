@@ -13,7 +13,7 @@ module.exports = async (req, res, next) => {
 	if (!decoded) {
 		return res.status(401).send("Unauthorized");
 	}
-
+	
 	req.user = decoded;
 	next();
 };

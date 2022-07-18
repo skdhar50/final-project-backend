@@ -1,7 +1,7 @@
 "use strict";
 require("dotenv/config");
-const fetch = require("node-fetch");
 const FormData = require("form-data");
+const fetch = require("node-fetch");
 
 module.exports = class PaymentSession {
 	constructor() {

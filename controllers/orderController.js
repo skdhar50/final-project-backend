@@ -1,14 +1,15 @@
 const { Order } = require("../models/order");
 const { CartItem } = require("../models/cartItem");
 const { ShippingAddress } = require("../models/shippingAddress");
+const uuid = require("../utilities/helpers/uuid");
 const _ = require("lodash");
 
-function getTransectionId() {
+function setOrderId() {
 	let result = "";
 	let characters =
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 	let charactersLength = characters.length;
-	for (let i = 0; i < 5; i++) {
+	for (let i = 0; i < 8; i++) {
 		result += characters.charAt(Math.floor(Math.random() * charactersLength));
 	}
 	return result;
@@ -45,27 +46,33 @@ module.exports.placeOrder = async (req, res) => {
 	});
 
 	const selectedShippingAddress = {
+		name: temp.name,
 		phone: temp.phone,
 		city: temp.city,
 		country: "Bangladesh",
 		postalCode: "4000",
 		address1: temp.area,
 		address2: temp.fullAddress,
+		state: temp.zone
 	};
-
+	
 	const newOrder = new Order({
 		cartItem: tempCart,
+		transaction_id: uuid(),
+		order_id: setOrderId(),
 		address: selectedShippingAddress,
-		transaction_id: getTransectionId(),
 		payment_method: paymentMethod,
 		user: req.user._id,
 		discount: req.body.discount,
 	});
 
-	await newOrder.save();
-	await CartItem.deleteMany({ user: req.user._id, isSelected: true });
+	const order = await newOrder.save();
+	
+	if(paymentMethod === 'cod') {
+		await CartItem.deleteMany({ user: req.user._id, isSelected: true });
+	}
 
 	return res
 		.status(200)
-		.send({ message: "Order created successfully", type: "success" });
+		.send({ data: order._id, message: "Order created successfully", type: "success" });
 };

@@ -12,6 +12,10 @@ module.exports.Order = model(
 			},
 			order_id: String,
 			address: {
+				name: {
+					type: String,
+					required: true,
+				},
 				phone: {
 					type: String,
 					required: true,
@@ -73,6 +77,7 @@ module.exports.Order = model(
 				default: "no_call",
 			},
 			discount: Number,
+			sessionKey: String,
 		},
 		{ timestamps: true }
 	)
