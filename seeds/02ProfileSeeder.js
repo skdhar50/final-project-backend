@@ -16,12 +16,9 @@ async function factory() {
         data.push({
             "user": usersData[i]._id,
             "phone": faker.phone.phoneNumber(),
-            "address1": faker.address.streetAddress(),
-            "address2": faker.address.secondaryAddress(),
-            "city": faker.address.cityName(),
-            "state": faker.address.state(),
-            "postalCode": faker.address.zipCode(),
-            "country": faker.address.country(),
+            "gender": "male",
+            "birthDate": "1990-10-10",
+            "photo": faker.image.imageUrl(),
         });
     }
 

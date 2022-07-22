@@ -7,7 +7,7 @@ dealer.dealerList = async (req, res) => {
     try {
         res.json({
             data: {
-                dealer: await Dealer.find(),
+                dealer: await Dealer.find().sort({ _id: -1 }),
             },
             message: "Successfully retrievied!",
             error: false,

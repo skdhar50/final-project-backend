@@ -1,0 +1,17 @@
+[
+	{
+		"name": "Crew Neck",
+		"parent_id": "62bddea2eff0ccf97038b68d",
+		"status": "active"
+	},
+	{
+		"name": "Y neck",
+		"parent_id": "62bddea2eff0ccf97038b68d",
+		"status": "active"
+	},
+	{
+		"name": "Sleeveless",
+		"parent_id": "62bddea2eff0ccf97038b68d",
+		"status": "active"
+	}
+]

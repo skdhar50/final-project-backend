@@ -6,6 +6,7 @@ module.exports.Product = model(
 		{
 			name: String,
 			price: Number,
+			shortDescription: String,
 			description: String,
 			category: [
 				{
@@ -18,12 +19,14 @@ module.exports.Product = model(
 				ref: "Brand",
 			},
 			quantity: Number,
+			totalSell: Number,
 			photos: [String],
 			unitPrice: Number,
 			size: String,
 			color: String,
 			weight: String,
-			status:{
+			isExclusive: Boolean,
+			status: {
 				type: String,
 				enum: ["active", "inactive", "discontinued"],
 				default: "active",

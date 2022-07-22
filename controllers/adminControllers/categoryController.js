@@ -5,7 +5,7 @@ let category = {}
 
 category.categoryList = async (req, res) => {
     try{
-        const categories = await Category.find();
+        const categories = await Category.find().sort({ _id: -1 });
         res.json({
             data: {
                 categories,

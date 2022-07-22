@@ -2,13 +2,24 @@ const { check, validationResult } = require('express-validator');
 const { Category } = require('../../models/category');
 const { Brand } = require('../../models/brand');
 const isBase64 = require('is-base64');
+const { Product } = require('../../models/product');
 
 let validators = {}
 validators.addProductValidators = [
     check('name')
         .isLength({ min: 3 })
         .withMessage('Name is required')
-        .trim(),
+        .trim()
+        .custom(async (value, { req }) => {
+            try {
+                const brand = await Product.findOne({ "name": value});
+                if (brand) {
+                    throw new Error('Product name must be unique!');
+                }
+            } catch (err) {
+                throw new Error(err);
+            }
+        }),
     check('price')
         .isInt()
         .withMessage('Invalid price'),

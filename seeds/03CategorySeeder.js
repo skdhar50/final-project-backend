@@ -5,6 +5,9 @@ const { Category } = require("../models/category");
 
 const data = [
     {
+        "name": "Clothing",
+    },
+    {
         "name": "Electronics",
         "status": "active"
     },

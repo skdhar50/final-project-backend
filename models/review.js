@@ -14,6 +14,7 @@ module.exports.Review = model(
 			},
 			review: String,
 			rating: String,
+			photos: [String]
 		},
 		{ timestamps: true }
 	)

@@ -1,10 +1,9 @@
 const { User } = require("../models/user");
 const { faker } = require('@faker-js/faker');
 const mongoose = require("./db");
+const bcrypt = require("bcrypt");
 
 const numberOfSeed = 10;
-
-
 
 function factory() {
 
@@ -14,6 +13,7 @@ function factory() {
 
         let name = faker.name.findName();
         let email = faker.internet.email();
+        
         let password = "12345678";
 
         data.push({

@@ -32,7 +32,7 @@ banner.bannerList = async (req, res) => {
     try {
         res.json({
             data: {
-                banner: await Banner.find(),
+                banner: await Banner.find().sort({ _id: -1 }),
             },
             message: "Suceesfully retrived!",
             error: false

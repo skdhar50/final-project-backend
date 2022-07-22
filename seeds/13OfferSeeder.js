@@ -18,8 +18,7 @@ async function factory() {
             "description": faker.lorem.words(15),
             "discountAmount": faker.datatype.number({ min: 200, max: 500 }),
             "limit": faker.datatype.number({ min: 1000, max: 5000 }),
-            "category": [categories[0]._id],
-            "brand": [],
+            "photo": faker.image.imageUrl(),
             "products": [],
             "status": faker.random.arrayElement(["active", "inactive"]),
         });

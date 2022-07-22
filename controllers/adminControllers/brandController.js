@@ -6,7 +6,7 @@ let brand = {}
 
 brand.brandList = async (req, res) => {
     try{
-        const brands = await Brand.find();
+        const brands = await Brand.find().sort({ _id: -1 });
         res.json({
             data: {
                 brands: brands,
