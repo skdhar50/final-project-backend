@@ -2,18 +2,16 @@ require("express-async-errors");
 const error = require("./middlewares/error");
 const app = require("express")();
 const express = require("express");
+const compression = require("compression");
+const cors = require("cors");
 
 require("./middlewares/")(app);
 require("./middlewares/routes")(app);
 
-app.use("/test", (req, res) => {
-	res.json({
-		m: "mm",
-	});
-});
-
 app.use(error);
-// app.use('/storages', express.static('storages'))
 app.use("/public", express.static("public"));
+app.use(compression);
+app.use(cors);
+app.use(express.json());
 
 module.exports = app;

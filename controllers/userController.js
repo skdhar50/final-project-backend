@@ -37,7 +37,7 @@ module.exports.getUserProfile = async (req, res) => {
 	const profile = await Profile.findOne({ user: req.user._id }).populate(
 		"user"
 	);
-		console.log(profile);
+
 	return res.status(200).send({ data: profile });
 };
 
