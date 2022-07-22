@@ -14,6 +14,7 @@ const reviewRouter = require('../routers/adminRouters/reviewRouter');
 const offerRouter = require('../routers/adminRouters/offerRouter');
 const couponRouter = require('../routers/adminRouters/couponRouter');
 const notificationRouter = require('../routers/adminRouters/notificationRouter');
+const crmRouter = require('../routers/adminRouters/crmRouter');
 
 
 admin.use('/users', userRouter);
@@ -31,6 +32,7 @@ admin.use('/reviews', reviewRouter);
 admin.use('/offers', offerRouter);
 admin.use('/coupons', couponRouter);
 admin.use('/notifications', notificationRouter);
+admin.use('/crm', crmRouter);
 
 
 module.exports = admin;

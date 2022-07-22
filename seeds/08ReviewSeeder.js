@@ -18,6 +18,7 @@ async function factory() {
             "product": faker.random.arrayElement(products)._id,
             "review": faker.lorem.words(50),
             "rating": faker.datatype.float({ min: 1, max: 5, precision: 0.1 }),
+            "photos": [faker.image.imageUrl()],
         });
     }
     

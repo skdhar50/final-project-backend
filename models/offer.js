@@ -16,18 +16,7 @@ module.exports.Offer = model(
 				default: "active",
 			},
 			photo: String,
-			// category: [
-			// 	{
-			// 		type: Schema.Types.ObjectId,
-			// 		ref: "Category",
-			// 	},
-			// ],
-			// brand: [
-			// 	{
-			// 		type: Schema.Types.String,
-			// 		ref: "Brand",
-			// 	},
-			// ],
+			
 			products: [
 				{
 					type: Schema.Types.ObjectId,

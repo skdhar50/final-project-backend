@@ -29,6 +29,7 @@ const adminReviewRouter = require("../routers/adminRouters/reviewRouter");
 const adminOfferRouter = require("../routers/adminRouters/offerRouter");
 const adminCouponRouter = require("../routers/adminRouters/couponRouter");
 const adminNotificationRouter = require("../routers/adminRouters/notificationRouter");
+const adminCrmRouter = require('../routers/adminRouters/crmRouter');
 
 module.exports = (app) => {
 	// user
@@ -47,19 +48,20 @@ module.exports = (app) => {
 	app.use("/api/payment", userPaymentRouter);
 
 	// admin
-	app.use("/users", adminUserRouter);
-	app.use("/brands", adminBrandRouter);
-	app.use("/categories", adminCategoryRouter);
-	app.use("/products", adminProductRouter);
-	app.use("/banners", adminBannerRouter);
-	app.use("/carousels", adminCarouselRouter);
-	app.use("/carts", adminCartRouter);
-	app.use("/orders", adminOrderRouter);
-	app.use("/employees", adminEmployeeRouter);
-	app.use("/dealers", adminDealerRouter);
-	app.use("/deals", adminDealRouter);
-	app.use("/reviews", adminReviewRouter);
-	app.use("/offers", adminOfferRouter);
-	app.use("/coupons", adminCouponRouter);
-	app.use("/notifications", adminNotificationRouter);
+	app.use("/api/admin/users", adminUserRouter);
+	app.use("/api/admin/brands", adminBrandRouter);
+	app.use("/api/admin/categories", adminCategoryRouter);
+	app.use("/api/admin/products", adminProductRouter);
+	app.use("/api/admin/banners", adminBannerRouter);
+	app.use("/api/admin/carousels", adminCarouselRouter);
+	app.use("/api/admin/carts", adminCartRouter);
+	app.use("/api/admin/orders", adminOrderRouter);
+	app.use("/api/admin/employees", adminEmployeeRouter);
+	app.use("/api/admin/dealers", adminDealerRouter);
+	app.use("/api/admin/deals", adminDealRouter);
+	app.use("/api/admin/reviews", adminReviewRouter);
+	app.use("/api/admin/offers", adminOfferRouter);
+	app.use("/api/admin/coupons", adminCouponRouter);
+	app.use("/api/admin/notifications", adminNotificationRouter);
+	app.use('/api/admin/crm', adminCrmRouter);
 };

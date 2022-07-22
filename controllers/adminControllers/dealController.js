@@ -4,7 +4,7 @@ let deal = {};
 
 deal.dealList = async (req, res) => {
     try {
-        const deal = await Deal.find().populate('dealer', 'company name');
+        const deal = await Deal.find().populate('dealer', 'company name').sort({ _id: -1 });
         res.json({
             data: {
                 deal,
@@ -42,9 +42,15 @@ deal.showDeal = async (req, res) => {
 }
 deal.createDeal = async (req, res) => {
     // res.send(req.body)
-    const newDeal = new Deal({
-        ...req.body
-    })
+    let data = {...req.body}
+    if (parseInt(data.due,10)===0) {
+        data.payment_status = "paid";
+    } else if (data.deal_value === data.due) {
+        data.payment_status = "unpaid";
+    } else {
+        data.payment_status = "risidual";
+    }
+    const newDeal = new Deal(data)
     try {
         const deal = await newDeal.save();
         res.json({

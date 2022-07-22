@@ -102,9 +102,9 @@ validators.updateUserValidators = [
         .isEmail()
         .withMessage("Invalid email address")
         .trim()
-        .custom(async (value) => {
+        .custom(async (value, {req}) => {
             try {
-                const user = await User.findOne({ email: value });
+                const user = await User.findOne({ email: value, _id: { $ne: req.body._id } });
                 if (user) {
                     throw new Error('Email already is use!');
                 }

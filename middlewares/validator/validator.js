@@ -6,6 +6,7 @@ const { Product } = require('../../models/product');
 const { User } = require('../../models/user');
 const { Dealer } = require('../../models/dealer');
 const { Coupon } = require('../../models/coupon');
+const { optional } = require('joi');
 
 
 let validators = {}
@@ -93,7 +94,17 @@ validators.updateBrandValidator = [
     check('name')
         .optional()
         .isLength({ min: 1 })
-        .withMessage('Name is required'),
+        .withMessage('Name is required')
+        .custom(async (value, { req }) => {
+            try {
+                const brand = await Brand.findOne({ "name": value, "_id":{$ne: req.body.id}});
+                if (brand) {
+                    throw new Error('Brand name must be unique!');
+                }
+            } catch (err) {
+                throw new Error(err);
+            }
+        }),
     check('icon')
         .optional()
         .custom(async (value) => {
@@ -184,7 +195,7 @@ validators.addCategoryValidator = [
                     throw new Error('category name must be unique!');
                 }
             } catch (err) {
-                throw new Error('category name must be unique!');
+                throw new Error(err);
             }
         }),
     check('parent_id')
@@ -196,7 +207,7 @@ validators.addCategoryValidator = [
                     throw new Error('Invalid category ID!');
                 }
             } catch (err) {
-                throw new Error('Invalid category ID!');
+                throw new Error(err);
             }
         }),
     check('status')
@@ -208,17 +219,17 @@ validators.updateCategoryValidator = [
     check('name')
         .optional()
         .isLength({ min: 1 })
-        .withMessage('Name is required')
-        .custom(async (value) => {
-            try {
-                const category = await Category.findOne({ name: value });
-                if (category) {
-                    throw new Error('category name must be unique!');
-                }
-            } catch (err) {
-                throw new Error('category name must be unique!');
-            }
-        }),
+        .withMessage('Name is required'),
+        // .custom(async (value) => {
+        //     try {
+        //         const category = await Category.findOne({ name: value });
+        //         if (category) {
+        //             throw new Error('category name must be unique!');
+        //         }
+        //     } catch (err) {
+        //         throw new Error('category name must be unique!');
+        //     }
+        // }),
     check('parent_id')
         .optional()
         .custom(async (value) => {
@@ -228,7 +239,7 @@ validators.updateCategoryValidator = [
                     throw new Error('Invalid category ID!');
                 }
             } catch (err) {
-                throw new Error('Invalid category ID!');
+                throw new Error(err);
             }
         }),
     check('status')
@@ -250,7 +261,7 @@ validators.addCouponValidator = [
                     throw new Error('Coupon must be unique!');
                 }
             } catch (err) {
-                throw new Error('Coupon must be unique!');
+                throw new Error(err);
             }
         }),
     check('start_form')
@@ -280,7 +291,7 @@ validators.addCouponValidator = [
                     throw new Error('Invalid category ID!');
                 }
             } catch (err) {
-                throw new Error('Invalid category ID!');
+                throw new Error(err);
             }
         }),
     check('brands.*') 
@@ -292,7 +303,7 @@ validators.addCouponValidator = [
                     throw new Error('Invalid brand ID!');
                 }
             } catch (err) {
-                throw new Error('Invalid brand ID!');
+                throw new Error(err);
             }
         }),
     check('products.*') 
@@ -304,7 +315,7 @@ validators.addCouponValidator = [
                     throw new Error('Invalid brand ID!');
                 }
             } catch (err) {
-                throw new Error('Invalid brand ID!');
+                throw new Error(err);
             }
         }),
     check('users.*') 
@@ -316,7 +327,7 @@ validators.addCouponValidator = [
                     throw new Error('Invalid user ID!');
                 }
             } catch (err) {
-                throw new Error('Invalid user ID!');
+                throw new Error(err);
             }
         }),
     check('status')
@@ -329,14 +340,14 @@ validators.updateCouponValidator = [
         .optional()
         .isLength({ min: 1 })
         .withMessage('Code is required')
-        .custom(async (value) => {
+        .custom(async (value, { req }) => {
             try {
-                const code = await Coupon.findOne({ code: value });
+                const code = await Coupon.findOne({ code: value, _id: { $ne: req.body._id } });
                 if (code) {
                     throw new Error('Coupon must be unique!');
                 }
             } catch (err) {
-                throw new Error('Coupon must be unique!');
+                throw new Error(err);
             }
         }),
     check('start_form')
@@ -370,7 +381,7 @@ validators.updateCouponValidator = [
                     throw new Error('Invalid category ID!');
                 }
             } catch (err) {
-                throw new Error('Invalid category ID!');
+                throw new Error(err);
             }
         }),
     check('brands.*') 
@@ -382,7 +393,7 @@ validators.updateCouponValidator = [
                     throw new Error('Invalid brand ID!');
                 }
             } catch (err) {
-                throw new Error('Invalid brand ID!');
+                throw new Error(err);
             }
         }),
     check('products.*') 
@@ -394,7 +405,7 @@ validators.updateCouponValidator = [
                     throw new Error('Invalid product ID!');
                 }
             } catch (err) {
-                throw new Error('Invalid product ID!');
+                throw new Error(err);
             }
         }),
     check('users.*') 
@@ -406,7 +417,7 @@ validators.updateCouponValidator = [
                     throw new Error('Invalid user ID!');
                 }
             } catch (err) {
-                throw new Error('Invalid user ID!');
+                throw new Error(err);
             }
         }),
     check('status')
@@ -427,7 +438,7 @@ validators.addDealValidator = [
                     throw new Error('Invalid dealer ID!');
                 }
             } catch (err) {
-                throw new Error('Invalid dealer ID!');
+                throw new Error(err);
             }
         }),
     check('deal_value')
@@ -451,7 +462,7 @@ validators.addDealValidator = [
                     throw new Error('Invalid brand ID!');
                 }
             } catch (err) {
-                throw new Error('Invalid brand ID!');
+                throw new Error(err);
             }
         }),
     check('products.*.category.*')
@@ -464,7 +475,7 @@ validators.addDealValidator = [
                     throw new Error('Invalid category ID!');
                 }
             } catch (err) {
-                throw new Error('Invalid category ID!');
+                throw new Error(err);
             }
         }),
     check('products.*.quantity')
@@ -481,8 +492,9 @@ validators.addDealValidator = [
         .isDate()
         .withMessage('invalid date'),
     check('payment_status')
-        .isLength({ min: 1 })
-        .withMessage('payment status is required')
+        // .isLength({ min: 1 })
+        // .withMessage('payment status is required')
+        .optional()
         .isIn(['paid', 'unpaid', 'risidual'])
         .withMessage('Invalid size value'),
     check('due')
@@ -505,7 +517,7 @@ validators.UpdateDealValidator = [
                     throw new Error('Invalid dealer ID!');
                 }
             } catch (err) {
-                throw new Error('There was a server side error!');
+                throw new Error(err);
             }
         }),
     check('deal_value')
@@ -525,7 +537,7 @@ validators.UpdateDealValidator = [
                     throw new Error('Invalid dealer ID!');
                 }
             } catch (err) {
-                throw new Error('There was a server side error!');
+                throw new Error(err);
             }
         }),
     check('products.*.category.*')
@@ -537,7 +549,7 @@ validators.UpdateDealValidator = [
                     throw new Error('Invalid dealer ID!');
                 }
             } catch (err) {
-                throw new Error('There was a server side error!');
+                throw new Error(err);
             }
         }),
     check('products.*.quantity')
@@ -571,17 +583,17 @@ validators.UpdateDealValidator = [
 validators.addDealerValidator = [
     check('name')
         .isLength({ min: 1 })
-        .withMessage('Name is required')
-        .custom(async (value) => {
-            try {
-                const code = await Dealer.findOne({ name: value });
-                if (code) {
-                    throw new Error('Name must be unique!');
-                }
-            } catch (err) {
-                throw new Error('Name must be unique!');
-            }
-        }),
+        .withMessage('Name is required'),
+        // .custom(async (value) => {
+        //     try {
+        //         const code = await Dealer.findOne({ name: value });
+        //         if (code) {
+        //             throw new Error('Name must be unique!');
+        //         }
+        //     } catch (err) {
+        //         throw new Error(err);
+        //     }
+        // }),
     check('company')
         .isLength({ min: 1 })
         .withMessage('company is required'),
@@ -606,17 +618,17 @@ validators.updateDealerValidator = [
     check('name')
         .optional()
         .isLength({ min: 1 })
-        .withMessage('Name is required')
-        .custom(async (value) => {
-            try {
-                const code = await Dealer.findOne({ name: value });
-                if (code) {
-                    throw new Error('Name must be unique!');
-                }
-            } catch (err) {
-                throw new Error('Name must be unique!');
-            }
-        }),
+        .withMessage('Name is required'),
+        // .custom(async (value) => {
+        //     try {
+        //         const code = await Dealer.findOne({ name: value });
+        //         if (code) {
+        //             throw new Error('Name must be unique!');
+        //         }
+        //     } catch (err) {
+        //         throw new Error('Name must be unique!');
+        //     }
+        // }),
     check('company')
         .optional()
         .isLength({ min: 1 })
@@ -750,7 +762,7 @@ validators.addNotificationValidator = [
                     throw new Error('Invalid user ID!');
                 }
             } catch (err) {
-                throw new Error('Invalid user ID!');
+                throw new Error(err);
             }
         }),
     check('status')
@@ -780,7 +792,7 @@ validators.updateNotificationValidator = [
                     throw new Error('Invalid user ID!');
                 }
             } catch (err) {
-                throw new Error('There was a server side error!');
+                throw new Error(err);
             }
         }),
     check('status')
@@ -816,7 +828,7 @@ validators.addOfferValidator = [
                     throw new Error('Invalid category ID!');
                 }
             } catch (err) {
-                throw new Error('There was a server side error!');
+                throw new Error(err);
             }
         }),
     check('brand.*')
@@ -828,7 +840,7 @@ validators.addOfferValidator = [
                     throw new Error('Invalid brand ID!');
                 }
             } catch (err) {
-                throw new Error('There was a server side error!');
+                throw new Error(err);
             }
         }),
     check('products.*')
@@ -840,7 +852,7 @@ validators.addOfferValidator = [
                     throw new Error('Invalid product ID!');
                 }
             } catch (err) {
-                throw new Error('There was a server side error!');
+                throw new Error(err);
             }
         }),
     check('status')
@@ -878,7 +890,7 @@ validators.updateOfferValidator = [
                     throw new Error('Invalid category ID!');
                 }
             } catch (err) {
-                throw new Error('There was a server side error!');
+                throw new Error(err);
             }
         }),
     check('brand.*')
@@ -890,7 +902,7 @@ validators.updateOfferValidator = [
                     throw new Error('Invalid brand ID!');
                 }
             } catch (err) {
-                throw new Error('There was a server side error!');
+                throw new Error(err);
             }
         }),
     check('products.*')
@@ -902,7 +914,7 @@ validators.updateOfferValidator = [
                     throw new Error('Invalid product ID!');
                 }
             } catch (err) {
-                throw new Error('There was a server side error!');
+                throw new Error(err);
             }
         }),
     check('status')
@@ -924,7 +936,7 @@ validators.updateReviewValidator = [
         .withMessage('rating is required')
 ];
 
-validators.validationHandler = (req, res, next)=>{
+validators.validationHandler = (req, res, next) => {
     const errors = validationResult(req);
     const mappedErrors = errors.mapped();
     if (Object.keys(mappedErrors).length === 0) {

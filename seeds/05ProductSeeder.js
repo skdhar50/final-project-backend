@@ -7,6 +7,37 @@ const { Brand } = require("../models/brand");
 const numberOfSeed = 100;
 
 async function factory() {
+<<<<<<< HEAD
+
+    const categories = await Category.find();
+    const brands = await Brand.find();
+    let data = []
+
+    for (let i = 0; i < numberOfSeed; i++) {
+
+        data.push({
+            "name": faker.commerce.productName(),
+            "price": faker.commerce.price(200, 2000),
+            "shortDescription": faker.commerce.productDescription(), 
+            "description": faker.commerce.productDescription(),
+            "category": [
+                faker.random.arrayElement(categories)._id,
+                faker.random.arrayElement(categories)._id
+            ],
+            "brand": faker.random.arrayElement(brands)._id,
+            "quantity": faker.random.arrayElement([50, 100, 150, 130]),
+            "totalSell": 0,
+            "photos": [faker.image.imageUrl()],
+            "unitPrice": faker.commerce.price(150, 199),
+            "color": "",
+            "weight": "",
+            "height": "",
+            "isExclusive": false,
+        });
+    }
+
+    return data;
+=======
 	const categories = await Category.find();
 	const brands = await Brand.find();
 	let data = [];
@@ -28,6 +59,7 @@ async function factory() {
 	}
 
 	return data;
+>>>>>>> eef33ea03ee33255a750e0b06450ec114fd26560
 }
 
 async function seed() {

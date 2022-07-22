@@ -8,7 +8,7 @@ const base64Decode = (base64String, subName="IMG") => {
         const ext = base64String.split(';')[0].split('/')[1];
         const base64EncodedString = base64String.split(';base64,').pop();
         const name = subName + Date.now() + '.' + ext;
-        const path = 'storages/images/'+name;
+        const path = 'public/storage/images/'+name;
         fs.writeFile(path, base64EncodedString, { encoding: 'base64' }, function (err) {
             if (err) {
                 console.log("There was a error!");

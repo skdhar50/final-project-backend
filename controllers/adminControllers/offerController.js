@@ -1,4 +1,6 @@
+const { forEach } = require('lodash');
 const { Offer } = require('../../models/offer');
+const { Product } = require('../../models/product');
 
 let offer = {};
 
@@ -6,8 +8,8 @@ offer.offerList = async (req, res) => {
     try {
         const offers = await Offer
             .find()
-            .populate('category', 'name')
-            .populate('brand', 'name')
+            // .populate('category', 'name')
+            // .populate('brand', 'name')
             .populate('products', 'name price photos');
         
         res.json({
@@ -28,10 +30,17 @@ offer.offerList = async (req, res) => {
 offer.showOffer = async (req, res) => {
     try {
         const offer = await Offer
-            .findById(req.params.id)
-            .populate('category', 'name')
+            .findById(req.params.id);
+            // .populate('category', 'name')
+            // .populate('brand', 'name',)
+            // .populate('products', 'name price photos brand');
+        
+
+        let productsDetails = [];
+        offer.products = await Product.find({ '_id': { $in: offer['products'] } })
             .populate('brand', 'name')
-            .populate('products', 'name price photos');
+            .populate('category', 'name')
+            .sort({ _id: -1 });
         res.json({
             data: {
                 offer
@@ -42,6 +51,7 @@ offer.showOffer = async (req, res) => {
     } catch (err) {
         res.status(500).json({
             message: "There was a server side error!",
+            err: err,
             error: true
         })
     }
