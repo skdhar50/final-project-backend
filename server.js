@@ -2,6 +2,8 @@ require("dotenv/config");
 const app = require("./app");
 const mongoose = require("mongoose");
 
+global.__basedir = __dirname;
+
 const port = process.env.PORT || 3001;
 
 mongoose

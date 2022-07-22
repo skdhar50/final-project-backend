@@ -12,6 +12,10 @@ module.exports.Order = model(
 			},
 			order_id: String,
 			address: {
+				name: {
+					type: String,
+					required: true,
+				},
 				phone: {
 					type: String,
 					required: true,
@@ -40,6 +44,7 @@ module.exports.Order = model(
 					required: true,
 				},
 			},
+
 			paymentStatus: {
 				type: String,
 				enum: ["pending", "complete"],
@@ -73,6 +78,7 @@ module.exports.Order = model(
 			},
 			last_call: Date,
 			discount: Number,
+			sessionKey: String,
 		},
 		{ timestamps: true }
 	)

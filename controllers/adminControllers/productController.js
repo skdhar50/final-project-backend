@@ -3,7 +3,7 @@ const { Review } = require('../../models/review');
 const {base64Decode} = require('../../utilities/base64');
 const { totalSale } = require('../../utilities/productHelpers');
 
-let product = {}
+let product = {};
 
 product.createProduct = async (req, res) => {
     
@@ -92,47 +92,47 @@ product.showProduct = async (req, res) => {
     }
 }
 product.updateProduct = async (req, res) => {
-    delete req.body.photos;
-    try {
-        
-        const product = await Product.findByIdAndUpdate(
-            req.params.id,
-            {
-                $set: {...req.body}
-            },
-            { new: true });
-        res.json({
-            data: {
-                product,
-            },
-            message: "Product was updated suceesfully!",
-            error: false
-        })
-    }catch(err){
-        res.status(500).json({
-            message: "There was a server side error!",
-            error: true
-        })
-    }
-}
+	delete req.body.photos;
+	try {
+		const product = await Product.findByIdAndUpdate(
+			req.params.id,
+			{
+				$set: { ...req.body },
+			},
+			{ new: true }
+		);
+		res.json({
+			data: {
+				product,
+			},
+			message: "Product was updated suceesfully!",
+			error: false,
+		});
+	} catch (err) {
+		res.status(500).json({
+			message: "There was a server side error!",
+			error: true,
+		});
+	}
+};
 
 product.removeProduct = async (req, res) => {
-    try {
-        const product = await Product.findByIdAndDelete(req.params.id);
-        res.json({
-            data:{
-                product,
-            },
-            message:"Product was deleted successfully!",
-            error: false
-        })
-    }catch(err){
-        res.status(500).json({
-            message: "There was a server side error!",
-            error: true
-        })
-    }
-}
+	try {
+		const product = await Product.findByIdAndDelete(req.params.id);
+		res.json({
+			data: {
+				product,
+			},
+			message: "Product was deleted successfully!",
+			error: false,
+		});
+	} catch (err) {
+		res.status(500).json({
+			message: "There was a server side error!",
+			error: true,
+		});
+	}
+};
 
 product.addPhotos = async (req, res) => {
     

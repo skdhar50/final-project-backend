@@ -26,7 +26,7 @@ module.exports.Product = model(
 			color: String,
 			weight: String,
 			isExclusive: Boolean,
-			status:{
+			status: {
 				type: String,
 				enum: ["active", "inactive", "discontinued"],
 				default: "active",

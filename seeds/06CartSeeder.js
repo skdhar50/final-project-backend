@@ -4,7 +4,7 @@ const { Product } = require("../models/product");
 const { faker } = require('@faker-js/faker');
 const mongoose = require("./db");
 
-const numberOfSeed = 100;
+const numberOfSeed = 10;
 
 
 async function factory() {
@@ -20,7 +20,8 @@ async function factory() {
         data.push({
             "product": faker.random.arrayElement(products)._id,
             "count": faker.random.arrayElement([1, 2, 3, 4, 5]),
-            "user": faker.random.arrayElement(users)._id,
+            // "user": faker.random.arrayElement(users)._id,
+            "user": users[1]._id,
         });
     }
 
