@@ -6,7 +6,7 @@ const path = require("path");
 const _ = require("lodash");
 
 module.exports.successPage = async (req, res) => {
-	console.log(__basedir)
+	console.log(__basedir);
 	res.sendFile(path.join(__basedir + "/public/pages/success.html"));
 };
 module.exports.failedPage = async (req, res) => {};
@@ -51,10 +51,11 @@ module.exports.initPayment = async (req, res) => {
 		.reduce((a, b) => a + b, 0);
 
 	payment.setUrls({
-		success_url: "yoursite.com/success",
+		success_url:
+			"https://calm-fortress-09101.herokuapp.com/api/payment/success",
 		fail_url: "yoursite.com/fail",
 		cancel_url: "yoursite.com/cancel",
-		ipn: "yoursite.com/api/payment/ipn", // Need to change when site is deployed
+		ipn: "https://calm-fortress-09101.herokuapp.com/api/payment/ipn",
 	});
 
 	payment.setOrderInfo({
