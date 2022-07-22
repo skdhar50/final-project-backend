@@ -23,7 +23,7 @@ product.createProduct = async (req, res) => {
     // res.json({ ...req.body });
     try {
         const newProduct = new Product({
-            ...inputData
+            ...inputData, totalSell:0
         });
         const product = await newProduct.save();
         

@@ -18,15 +18,21 @@ async function factory() {
         data.push({
             "name": faker.commerce.productName(),
             "price": faker.commerce.price(200, 2000),
+            "shortDescription": faker.commerce.productDescription(), 
             "description": faker.commerce.productDescription(),
             "category": [
                 faker.random.arrayElement(categories)._id,
                 faker.random.arrayElement(categories)._id
             ],
             "brand": faker.random.arrayElement(brands)._id,
-            "quantity": faker.random.arrayElement([50,100,150,130]),
-            "photo": faker.image.imageUrl(),
+            "quantity": faker.random.arrayElement([50, 100, 150, 130]),
+            "totalSell": 0,
+            "photos": [faker.image.imageUrl()],
             "unitPrice": faker.commerce.price(150, 199),
+            "color": "",
+            "weight": "",
+            "height": "",
+            "isExclusive": false,
         });
     }
 

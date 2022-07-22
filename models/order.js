@@ -10,6 +10,7 @@ module.exports.Order = model(
 				type: String,
 				unique: true,
 			},
+			order_id: String,
 			address: {
 				phone: {
 					type: String,
@@ -67,9 +68,10 @@ module.exports.Order = model(
 			},
 			call_status: {
 				type: String,
-				enum: ["no_call", "one_time", "two_time", "three_time"],
+				enum: ["no_call", "one_time", "two_time", "three_time", "received_confirm", "received_cancell"],
 				default: "no_call",
 			},
+			last_call: Date,
 			discount: Number,
 		},
 		{ timestamps: true }

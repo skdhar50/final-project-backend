@@ -4,7 +4,7 @@ const { Order } = require("../models/order");
 const { faker } = require('@faker-js/faker');
 const mongoose = require("./db");
 
-const numberOfSeed = 5;
+const numberOfSeed = 1;
 
 
 async function factory() {
@@ -16,20 +16,24 @@ async function factory() {
         
         
         orders.push({
+            "order_id": faker.random.alphaNumeric(10).toUpperCase(),
             "cartItem": [...products],
             "transaction_id": faker.random.alphaNumeric(12),
             "address": {
                 "phone": faker.phone.phoneNumber(),
                 "address1": faker.address.streetAddress(),
                 "address2": faker.address.secondaryAddress(),
-                "city": faker.address.cityName(),
+                "city": faker.random.arrayElement(["Chittagong","Chittagong","Chittagong","Chittagong", "Dhaka","Sylhet"]),
                 "state": faker.address.state(),
                 "postalCode": faker.address.zipCode(),
                 "country": faker.address.country(),
                 
             },
             "paymentStatus": faker.random.arrayElement(["pending", "complete"]),
+            "paymentMethod": faker.random.arrayElement(["cod", "card", "bkash", "rocket"]),
             "user": items[i],
+            "call_status": faker.random.arrayElement(["no_call", "one_time", "two_time", "three_time", "received_confirm", "received_cancell"]),
+            "discount": 0,
             "status": faker.random.arrayElement([
                 "pending",
                 "processing",
@@ -38,6 +42,7 @@ async function factory() {
                 "returned",
                 "cancelled",
             ]),
+            "last_call": "",
         });
     }
     

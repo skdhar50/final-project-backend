@@ -1,4 +1,5 @@
 const { Order } = require('../../models/order');
+const { Product } = require('../../models/product');
 const { notificationMaker } = require('../../utilities/notification');
 
 let order = {};
@@ -47,12 +48,44 @@ order.showOrder = async (req, res) => {
 }
 order.updateOrder = async (req, res) => {
     try {
+        if (req.body.hasOwnProperty('call_status')) {
+            req.body.last_call = Date.now();
+        }
         const order = await Order.findByIdAndUpdate(
             req.params.id,
             { $set: { ...req.body } },
-            { new: true }
+            // { new: true }
         );
         if (req.body.hasOwnProperty('status')) {
+
+            if (req.body.status === "delivered") {
+                //incrementing total sell
+                // const order = await Order
+                //     .findById(req.params.id)
+                //     .populate('cartItem.product', 'product count');
+                
+                order.cartItem.forEach(async item => {
+                    const product = await Product.findOneAndUpdate( {_id: item.product}, 
+                        {$inc : {'totalSell' : item.count}}, 
+                        { new: true }
+                    );
+                    // console.log(item.product);
+                    // console.log(item.count)
+                    // console.log("####################")
+                    
+                });
+            } else if (order.status === "delivered" && req.body.status !== "delivered") {
+                order.cartItem.forEach(async item => {
+                    const product = await Product.findOneAndUpdate( {_id: item.product}, 
+                        {$inc : {'totalSell' : -item.count}}, 
+                        { new: true }
+                    );
+                    // console.log(item.product);
+                    // console.log(item.count)
+                    // console.log("####################")
+                    
+                });
+            }
             notificationMaker(
                 'Order Status Changed',
                 'Your order: #'+order._id+' changed to '+req.body.status,

@@ -8,8 +8,8 @@ offer.offerList = async (req, res) => {
     try {
         const offers = await Offer
             .find()
-            .populate('category', 'name')
-            .populate('brand', 'name')
+            // .populate('category', 'name')
+            // .populate('brand', 'name')
             .populate('products', 'name price photos');
         
         res.json({

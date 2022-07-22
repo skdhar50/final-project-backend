@@ -8,8 +8,8 @@ coupon.couponList = async (req, res) => {
     try {
         const coupons = await Coupon
             .find()
-            .populate('categories', 'name')
-            .populate('brands', 'name')
+            // .populate('categories', 'name')
+            // .populate('brands', 'name')
             .populate('products', 'name price')
             .populate('users', 'name email')
             .sort({ _id: -1 });
