@@ -13,7 +13,7 @@ app.use("/test", (req, res) => {
 });
 
 app.use(error);
-app.use('/storages', express.static('storages'))
-// app.use(express.static('public'))
+// app.use('/storages', express.static('storages'))
+app.use("/public", express.static("public"));
 
 module.exports = app;
