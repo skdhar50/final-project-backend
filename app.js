@@ -10,9 +10,9 @@ require("./middlewares/routes")(app);
 
 app.use(error);
 app.use("/public", express.static("public"));
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
 app.use(compression);
 
 module.exports = app;
