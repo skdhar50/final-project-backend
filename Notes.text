@@ -1,0 +1,4 @@
+db live:
+mongodb+srv://e_shop_backend:mmzzk1okYvaRPPcf@cluster0.bs2xks5.mongodb.net/final-project-db?retryWrites=true&w=majority
+
+db local: mongodb://localhost:27017/final-project-db

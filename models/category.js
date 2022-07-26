@@ -19,6 +19,11 @@ module.exports.Category = model(
 				enum: ["active", "inactive"],
 				default: "active",
 			},
+			photo: String,
+			isFeatured: {
+				type: Boolean,
+				default: false
+			}
 		},
 		{ timestamps: true }
 	)

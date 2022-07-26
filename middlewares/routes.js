@@ -31,6 +31,8 @@ const adminOfferRouter = require("../routers/adminRouters/offerRouter");
 const adminCouponRouter = require("../routers/adminRouters/couponRouter");
 const adminNotificationRouter = require("../routers/adminRouters/notificationRouter");
 const adminCrmRouter = require('../routers/adminRouters/crmRouter');
+const adminDashboard = require('../routers/adminRouters/dashboardRouter');
+const adminAuth = require("./adminAuth");
 
 module.exports = (app) => {
 	// user
@@ -50,6 +52,7 @@ module.exports = (app) => {
 	app.use("/api/coupon", userCouponRouter);
 
 	// admin
+	// app.use("/api/admin", adminAuth);
 	app.use("/api/admin/users", adminUserRouter);
 	app.use("/api/admin/brands", adminBrandRouter);
 	app.use("/api/admin/categories", adminCategoryRouter);
@@ -66,4 +69,5 @@ module.exports = (app) => {
 	app.use("/api/admin/coupons", adminCouponRouter);
 	app.use("/api/admin/notifications", adminNotificationRouter);
 	app.use('/api/admin/crm', adminCrmRouter);
+	app.use('/api/admin/dashboard', adminDashboard);
 };

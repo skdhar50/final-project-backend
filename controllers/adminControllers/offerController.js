@@ -1,6 +1,7 @@
 const { forEach } = require('lodash');
 const { Offer } = require('../../models/offer');
 const { Product } = require('../../models/product');
+const { base64Decode } = require('../../utilities/base64');
 
 let offer = {};
 
@@ -58,6 +59,10 @@ offer.showOffer = async (req, res) => {
 }
 offer.createOffer = async (req, res) => {
     // res.send(req.body)
+    if (req.body.hasOwnProperty('photo')) {
+        req.body.photo = base64Decode(req.body.photo, 'OFFER');
+    }
+    // base64Decode
     const newOffer = new Offer({
         ...req.body
     })

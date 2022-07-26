@@ -4,7 +4,7 @@ const { Order } = require("../models/order");
 const { faker } = require('@faker-js/faker');
 const mongoose = require("./db");
 
-const numberOfSeed = 1;
+const numberOfSeed = 10;
 
 
 async function factory() {
@@ -20,6 +20,7 @@ async function factory() {
             "cartItem": [...products],
             "transaction_id": faker.random.alphaNumeric(12),
             "address": {
+                "name": faker.name.findName(),
                 "phone": faker.phone.phoneNumber(),
                 "address1": faker.address.streetAddress(),
                 "address2": faker.address.secondaryAddress(),

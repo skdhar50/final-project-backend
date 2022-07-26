@@ -213,7 +213,17 @@ validators.addCategoryValidator = [
     check('status')
         .optional()
         .isIn(['active', 'inactive'])
-        .withMessage('Invalid size')
+        .withMessage('Invalid size'),
+    check('photo')
+        .optional()
+        .custom((value) => {
+            const base64 = isBase64(value, {mimeRequired: true });
+            if (base64) {
+                return true;
+            } else {
+                throw new Error('Invalid base64 string');
+            }
+        }),
 ];
 validators.updateCategoryValidator = [
     check('name')
@@ -810,6 +820,17 @@ validators.addOfferValidator = [
     check('startDate')
         .isDate()
         .withMessage('invalid date'),
+    check('photo')
+        .isLength({ min: 1 })
+        .withMessage('photo (base64 string) is required')
+        .custom((value) => {
+            const base64 = isBase64(value, {mimeRequired: true });
+            if (base64) {
+                return true;
+            } else {
+                throw new Error('Invalid base64 string');
+            }
+        }),
     check('endDate')
         .isDate()
         .withMessage('invalid date'),
