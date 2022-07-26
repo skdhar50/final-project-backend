@@ -12,6 +12,7 @@ const userQnaRouter = require("../routers/qnaRouter");
 const userOrderRouter = require("../routers/orderRouter");
 const userCityLocationRouter = require("../routers/cityLocationRouter");
 const userPaymentRouter = require("../routers/paymentRouter");
+const userCouponRouter = require("../routers/couponRouter");
 
 // admin routes imports
 const adminUserRouter = require("../routers/adminRouters/userRouter");
@@ -48,6 +49,7 @@ module.exports = (app) => {
 	app.use("/api/reviews", userReviewRouter);
 	app.use("/api/qna", userQnaRouter);
 	app.use("/api/payment", userPaymentRouter);
+	app.use("/api/coupon", userCouponRouter);
 
 	// admin
 	// app.use("/api/admin", adminAuth);
