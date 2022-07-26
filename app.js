@@ -11,8 +11,8 @@ require("./middlewares/routes")(app);
 app.use(error);
 app.use("/public", express.static("public"));
 app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(compression);
 
 module.exports = app;

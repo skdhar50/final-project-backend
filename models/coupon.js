@@ -22,7 +22,8 @@ module.exports.Coupon = model(
             },
             offer_limit: {
                 type: Number,
-                required: true,
+                // required: true,
+                default: 1,
             },
             min_shopping_amount: {
                 type: Number,
