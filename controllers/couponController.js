@@ -16,7 +16,6 @@ module.exports.getCoupon = async (req, res) => {
 			new Date().getTime() < coupon[0].expired_in.getTime() &&
 			coupon[0].status === "active"
 		) {
-			console.log("Checking minimum shopping amount");
 			// If the coupon is not expired
 			// Checking if minimum shopping amount is okay
 			if (req.body.amount >= coupon[0].min_shopping_amount) {
@@ -61,14 +60,17 @@ module.exports.getCoupon = async (req, res) => {
 					let total_amount = req.body.amount;
 
 					// Checking if the coupon is valid for some products or all
+					
 					if (coupon[0].products.length > 0) {
 						let temp = [];
+						total_amount = 0;
+
 						products.forEach((product) => {
 							let eligable = coupon[0].products.find(
 								(item) => item.toString() === product.product._id.toString()
 							);
-
-							if (eligable.length > 0) {
+							
+							if (eligable !== undefined) {
 								temp.push(product);
 							}
 						});
@@ -81,6 +83,11 @@ module.exports.getCoupon = async (req, res) => {
 								0
 							);
 						}
+
+						if(total_amount === 0) {
+							return res.status(400).send({message: "Coupon is not applicable to these products."});
+						}
+						
 					}
 
 					if (total_amount < coupon[0].min_shopping_amount) {

@@ -8,7 +8,7 @@ const {
 const auth = require("../middlewares/auth");
 
 router.route("/:id").get(auth, initPayment);
-router.route("/ipn").post(ipnReceiver);
+router.route("/ipn").post(auth, ipnReceiver);
 router.route("/success").post(successPage);
 router.route("/fail").post(failedPage);
 
