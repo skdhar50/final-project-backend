@@ -18,7 +18,8 @@ module.exports.ipnReceiver = async (req, res) => {
 	console.log(req.body);
 
 	if (payment["status"] === "VALID") {
-		await CartItem.deleteMany({ user: req.user._id, isSelected: true });
+		const order = await Order.findOne({ transaction_id: tran_id });
+		await CartItem.deleteMany({ user: order.user, isSelected: true });
 
 		await Order.updateOne(
 			{ transaction_id: tran_id },
