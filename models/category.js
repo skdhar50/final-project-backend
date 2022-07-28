@@ -8,6 +8,8 @@ module.exports.Category = model(
 				type: String,
 				unique: true,
 			},
+			isFeatured: Boolean,
+			photo: String,
 			parent_id: {
 				type: Schema.Types.ObjectId,
 				ref: "Category", 
@@ -17,6 +19,11 @@ module.exports.Category = model(
 				enum: ["active", "inactive"],
 				default: "active",
 			},
+			photo: String,
+			isFeatured: {
+				type: Boolean,
+				default: false
+			}
 		},
 		{ timestamps: true }
 	)

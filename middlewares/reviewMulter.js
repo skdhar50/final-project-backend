@@ -1,7 +1,7 @@
 const multer = require("multer");
 const multerStorage = multer.diskStorage({
 	destination: function (req, res, cb) {
-		cb(null, "storages/reviews");
+		cb(null, "public/storage/reviews");
 	},
 	filename: function (req, file, cb) {
 		const extension = file.mimetype.split("/")[1];

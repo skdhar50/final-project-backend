@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<!-- <link rel="stylesheet" href="./success.css" /> -->
-		<title>Success</title>
-		<style>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Failed</title>
+
+    <style>
 			.backdrop {
 				position: fixed;
 				top: 0;
@@ -45,7 +45,7 @@
 
 			.modal-head--icon {
 				border-radius: 9999px;
-				background-color: rgb(22, 163, 74, 0.8);
+				background-color: rgba(236, 55, 55, 0.8);
 				padding-top: 1.5rem /* 24px */;
 				padding-bottom: 1.5rem /* 24px */;
 				color: rgb(255, 255, 255, 1);
@@ -109,9 +109,9 @@
 				}
 			}
 		</style>
-	</head>
-	<body>
-		<div class="backdrop">
+</head>
+<body>
+    <div class="backdrop">
 			<div class="modal-container">
 				<div class="modal-head">
 					<div class="modal-head--icon">
@@ -126,13 +126,13 @@
 							<path
 								stroke-linecap="round"
 								stroke-linejoin="round"
-								d="M5 13l4 4L19 7"
+								d="M6 18L18 6M6 6l12 12"
 							/>
 						</svg>
 					</div>
 				</div>
 				<div class="modal-body">
-					<p class="modal-body--title">Payment is Successfull!</p>
+					<p class="modal-body--title">Payment is Failed!</p>
 					<p class="modal-body--subtitle">Redirecting to Home Page...</p>
 				</div>
 			</div>
@@ -143,5 +143,5 @@
 				window.location = "http://localhost:3000/";
 			}, 3000);
 		</script>
-	</body>
+</body>
 </html>

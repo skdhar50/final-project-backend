@@ -22,7 +22,9 @@ category.categoryList = async (req, res) => {
     
 }
 category.createCategory = async (req, res) => {
-    
+    if (req.body.hasOwnProperty('photo')) {
+        req.body.photo = base64Decode(req.body.photo, 'CATEGORY');
+    }
     const newCategory = new Category({...req.body});
     try{
         const category = await newCategory.save();
