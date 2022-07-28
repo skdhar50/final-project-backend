@@ -109,7 +109,12 @@ dashboard.topCategories = async (req, res) => {
         let countCategories = {};
 
         // get orders
-        let orders = await Order.find({ status: 'delivered' })
+        let orders = [];
+        if (req.query.year) {
+            orders = await Order.find({
+                status: 'delivered',
+                deliveredAt: { $gte: `${req.query.year}-01-01T00:00:00.000Z`, $lte: `${req.query.year}-12-31T00:00:00.000Z` }
+            })
             .populate('cartItem.product', 'price')
             .populate('cartItem.product', 'category')
             .select({
@@ -117,6 +122,17 @@ dashboard.topCategories = async (req, res) => {
                 "discount": 1,
                 "status": 1
             });
+        } else {
+            orders = await Order.find({ status: 'delivered' })
+            .populate('cartItem.product', 'price')
+            .populate('cartItem.product', 'category')
+            .select({
+                "cartItem": 1,
+                "discount": 1,
+                "status": 1
+            });
+        }
+        
         
         // get categories
         orders.forEach(order => {
@@ -151,12 +167,8 @@ dashboard.topCategories = async (req, res) => {
             graphData.push(catInfo);
         }
         
-        
-
-
-
-        
         res.json({
+            year: req.query.year?req.query.year:'All',
             data: graphData,
             message:"Short summary fetched",
             error: false

@@ -79,6 +79,7 @@ module.exports.Order = model(
 			last_call: Date,
 			discount: Number,
 			sessionKey: String,
+			deliveredAt: Date,
 		},
 		{ timestamps: true }
 	)
