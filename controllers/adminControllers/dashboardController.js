@@ -103,7 +103,71 @@ dashboard.stockProducts = async (req, res) => {
     }
 }
 
+dashboard.topCategories = async (req, res) => {
+    try {
+        let data = {};
+        let countCategories = {};
 
+        // get orders
+        let orders = await Order.find({ status: 'delivered' })
+            .populate('cartItem.product', 'price')
+            .populate('cartItem.product', 'category')
+            .select({
+                "cartItem": 1,
+                "discount": 1,
+                "status": 1
+            });
+        
+        // get categories
+        orders.forEach(order => {
+            order.cartItem.map(item => {
+                item.product.category.map(cat => {
+                    // console.log(cat)
+                    if (countCategories.hasOwnProperty(cat)) {
+                        countCategories[cat] += 1;
+                    } else {
+                        countCategories[cat] = 1;
+                    }
+                    
+                })
+            })
+        })
+
+        const sortedCategory = Object.keys(countCategories)
+            .sort(function (a, b) { return countCategories[b] - countCategories[a] })
+            .slice(0, 5);
+        
+        const categories = await Category.find({ _id: { $in: sortedCategory } }).select({ 'name': 1 });
+
+        let graphData = [];
+        for (let i = 0; i < sortedCategory.length; i++){
+            let catInfo = {};
+            catInfo.category = categories.filter(item => {
+                if (item._id.toString() === sortedCategory[i]) {
+                    return true;
+                }
+            })[0];
+            catInfo.count = countCategories[sortedCategory[i]];
+            graphData.push(catInfo);
+        }
+        
+        
+
+
+
+        
+        res.json({
+            data: graphData,
+            message:"Short summary fetched",
+            error: false
+        })
+    }catch(err){
+        res.status(500).json({
+            message: "There was a server side error!",
+            error: true
+        })
+    }
+}
 
 
 
