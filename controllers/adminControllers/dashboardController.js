@@ -80,6 +80,29 @@ dashboard.shortSummary = async (req, res) => {
     }
 }
 
+dashboard.stockProducts = async (req, res) => {
+    
+    try {
+        let data = {};
+        data.inStock = await Product.find({ quantity: { $gt: 0} }).count();
+        data.outOfStock = await Product.find({ quantity: { $eq: 0} }).count();
+        data.almostOutOfStock = await Product.find({ quantity: { $lte: 10, $gt: 0} }).count();
+
+        
+        res.json({
+            data,
+            // inStock,
+            message:"Short summary fetched",
+            error: false
+        })
+    }catch(err){
+        res.status(500).json({
+            message: "There was a server side error!",
+            error: true
+        })
+    }
+}
+
 
 
 
