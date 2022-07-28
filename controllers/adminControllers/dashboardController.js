@@ -105,7 +105,6 @@ dashboard.stockProducts = async (req, res) => {
 
 dashboard.topCategories = async (req, res) => {
     try {
-        let data = {};
         let countCategories = {};
 
         // get orders
@@ -115,7 +114,7 @@ dashboard.topCategories = async (req, res) => {
                 status: 'delivered',
                 deliveredAt: { $gte: `${req.query.year}-01-01T00:00:00.000Z`, $lte: `${req.query.year}-12-31T00:00:00.000Z` }
             })
-            .populate('cartItem.product', 'price')
+            // .populate('cartItem.product', 'price')
             .populate('cartItem.product', 'category')
             .select({
                 "cartItem": 1,
@@ -140,9 +139,9 @@ dashboard.topCategories = async (req, res) => {
                 item.product.category.map(cat => {
                     // console.log(cat)
                     if (countCategories.hasOwnProperty(cat)) {
-                        countCategories[cat] += 1;
+                        countCategories[cat] += item.count + 1;
                     } else {
-                        countCategories[cat] = 1;
+                        countCategories[cat] = item.count + 1;
                     }
                     
                 })
@@ -179,6 +178,86 @@ dashboard.topCategories = async (req, res) => {
             error: true
         })
     }
+}
+
+dashboard.sellingStatus = async (req, res) => {
+    try {
+        if (!req.query.year) {
+                res.status(422).json({
+                message: "Year is required in query parameter!",
+                error: true
+            })
+        }
+        let countCategories = {};
+
+        // get orders
+        const orders = await Order.find({
+                status: 'delivered',
+                deliveredAt: { $gte: `${req.query.year}-01-01T00:00:00.000Z`, $lte: `${req.query.year}-12-31T00:00:00.000Z` }
+            })
+            .populate('cartItem.product', 'price')
+            .populate('cartItem.product', 'price')
+            .select({
+                "cartItem": 1,
+                "discount": 1,
+                "status": 1,
+                "deliveredAt": 1
+            });
+        
+        let sellingStatus = {};
+        sellingStatus.january = orderSummaryByMonth(0, orders);
+        sellingStatus.february = orderSummaryByMonth(1, orders);
+        sellingStatus.march = orderSummaryByMonth(2, orders);
+        sellingStatus.april = orderSummaryByMonth(3, orders);
+        sellingStatus.may = orderSummaryByMonth(4, orders);
+        sellingStatus.june = orderSummaryByMonth(5, orders);
+        sellingStatus.july = orderSummaryByMonth(6, orders);
+        sellingStatus.august = orderSummaryByMonth(7, orders);
+        sellingStatus.september = orderSummaryByMonth(8, orders);
+        sellingStatus.october = orderSummaryByMonth(9, orders);
+        sellingStatus.november = orderSummaryByMonth(10, orders);
+        sellingStatus.december = orderSummaryByMonth(11, orders);
+
+        
+        
+        
+        
+        res.json({
+            data: sellingStatus,
+            message:"Selling status",
+            error: false
+        })
+    }catch(err){
+        res.status(500).json({
+            message: "There was a server side error!",
+            error: true
+        })
+    }
+}
+
+// helper functions 
+function orderSummaryByMonth(month, orders) {
+    let data = {};
+    const filteredOrder = orders.filter(order => {
+        if (month === new Date(order.deliveredAt).getMonth()) {
+            return true;
+        } else return false;
+    })
+
+    data.totalOrder = filteredOrder.length;
+    let totalProduct = 0;
+    let totalSell = 0;
+    filteredOrder.forEach(order => {
+        
+        order.cartItem.forEach(item => {
+            totalProduct += item.count;
+            totalSell += (item.count * item.product.price);
+        })
+    })
+    data.totalProduct = totalProduct;
+    data.totalSell = totalSell;
+
+    return data;
 }
 
 
