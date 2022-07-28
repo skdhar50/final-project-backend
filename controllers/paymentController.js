@@ -67,7 +67,7 @@ module.exports.initPayment = async (req, res) => {
 	payment.setUrls({
 		success_url:
 			"https://calm-fortress-09101.herokuapp.com/api/payment/success",
-		fail_url: "yoursite.com/fail",
+		fail_url: "https://calm-fortress-09101.herokuapp.com/api/payment/fail",
 		cancel_url: "yoursite.com/cancel",
 		ipn: "https://calm-fortress-09101.herokuapp.com/api/payment/ipn",
 	});
