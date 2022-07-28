@@ -39,7 +39,7 @@ module.exports.getCoupon = async (req, res) => {
 				// If user is eligible for the coupon
 				// Checking if the user already used the coupon
 				const already_used = coupon[0].appliers.filter(
-					(user) => user.toString() === req.user._id.toString()
+					(user) => user.user.toString() === req.user._id.toString()
 				);
 
 				if (already_used.length > 0) {

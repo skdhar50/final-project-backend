@@ -3,6 +3,8 @@ const { CartItem } = require("../models/cartItem");
 const { ShippingAddress } = require("../models/shippingAddress");
 const uuid = require("../utilities/helpers/uuid");
 const _ = require("lodash");
+const { Coupon } = require("../models/coupon");
+const { request } = require("express");
 
 function setOrderId() {
 	let result = "";
@@ -53,9 +55,9 @@ module.exports.placeOrder = async (req, res) => {
 		postalCode: "4000",
 		address1: temp.area,
 		address2: temp.fullAddress,
-		state: temp.zone
+		state: temp.zone,
 	};
-	
+
 	const newOrder = new Order({
 		cartItem: tempCart,
 		transaction_id: uuid(),
@@ -64,15 +66,26 @@ module.exports.placeOrder = async (req, res) => {
 		payment_method: paymentMethod,
 		user: req.user._id,
 		discount: req.body.discount,
+		coupon: req.body.coupon,
 	});
 
 	const order = await newOrder.save();
-	
-	if(paymentMethod === 'cod') {
+	if (req.body.discount > 0) {
+		await Coupon.updateOne(
+			{ code: req.body.coupon },
+			{
+				$push: { appliers: { user: req.user._id, order_id: order._id } },
+			}
+		);
+	}
+
+	if (paymentMethod === "cod") {
 		await CartItem.deleteMany({ user: req.user._id, isSelected: true });
 	}
 
-	return res
-		.status(200)
-		.send({ data: order._id, message: "Order created successfully", type: "success" });
+	return res.status(200).send({
+		data: order._id,
+		message: "Order created successfully",
+		type: "success",
+	});
 };

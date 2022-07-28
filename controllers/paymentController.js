@@ -4,6 +4,7 @@ const { CartItem } = require("../models/cartItem");
 const { Payment } = require("../models/payment");
 const path = require("path");
 const _ = require("lodash");
+const { Coupon } = require("../models/coupon");
 
 module.exports.successPage = async (req, res) => {
 	res.sendFile(path.join(__basedir + "/public/pages/success.html"));
@@ -18,8 +19,8 @@ module.exports.ipnReceiver = async (req, res) => {
 
 	console.log(req.body);
 
+	const order = await Order.findOne({ transaction_id: tran_id });
 	if (payment["status"] === "VALID") {
-		const order = await Order.findOne({ transaction_id: tran_id });
 		await CartItem.deleteMany({ user: order.user, isSelected: true });
 
 		await Order.updateOne(
@@ -27,6 +28,15 @@ module.exports.ipnReceiver = async (req, res) => {
 			{ paymentStatus: "complete" }
 		);
 	} else if (payment["status"] === "FAILED") {
+		console.log("here")
+		if (order.discount > 0) {
+			await Coupon.updateOne(
+				{ code: order.coupon },
+				{
+					$pull: { appliers: { user: order.user, order_id: order._id } },
+				}
+			);
+		}
 		await Order.deleteOne({ transaction_id: tran_id });
 	}
 
