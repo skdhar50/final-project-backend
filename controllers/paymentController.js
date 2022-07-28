@@ -6,10 +6,11 @@ const path = require("path");
 const _ = require("lodash");
 
 module.exports.successPage = async (req, res) => {
-	console.log(__basedir);
 	res.sendFile(path.join(__basedir + "/public/pages/success.html"));
 };
-module.exports.failedPage = async (req, res) => {};
+module.exports.failedPage = async (req, res) => {
+	res.sendFile(path.join(__basedir + "/public/pages/failed.html"));
+};
 
 module.exports.ipnReceiver = async (req, res) => {
 	const payment = new Payment(req.body);
