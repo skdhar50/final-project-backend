@@ -5,17 +5,21 @@ const { Product } = require('../../models/product');
 const { Review } = require('../../models/review');
 const { User } = require('../../models/user');
 const { Order } = require('../../models/order');
+const { Deal } = require('../../models/deal');
 
 let dashboard = {};
 dashboard.shortSummary = async (req, res) => {
     
     try {
         let data = {};
-        // data.totalUser = await User.count();
-        // data.totalBrand = await Brand.count();
-        // data.totalCategory = await Category.count();
-        // data.totalEmployee = await Employee.count();
-        // calculating total sales
+        data.totalUser = await User.count();
+        data.totalBrand = await Brand.count();
+        data.totalCategory = await Category.count();
+        data.totalEmployee = await Employee.count();
+        data.totalPendingOrder = await Employee.find({ status: 'pending' }).count();
+
+        
+        // total sale & total revenue
         let orders = await Order.find({ status: 'delivered' })
             .populate('cartItem.product', 'price')
             .select({
@@ -23,18 +27,48 @@ dashboard.shortSummary = async (req, res) => {
                 "discount": 1,
                 "status": 1
             });
-        let totalSale = 0;
+        
+        let productIds = [];
+        // calculating total sales
+        data.totalSale = 0;
         orders.forEach(order => {
             let subTotal = 0;
             order.cartItem.forEach(item => {
-                subTotal += item.product.price * item.count
+                subTotal += (item.product.price * item.count)
+                if (!productIds.includes(item.product._id)) {
+                    productIds.push(item.product._id)
+                }
             })
-            subTotal = subTotal-order.discount
+            data.totalSale += subTotal-order.discount
         });
+
+        let saledProducts = await Product
+            .find({_id: {$in: productIds}})
+            .select({ "unitPrice": 1 });
+        
+        // calculating total cost of saled products
+        let costOfSaledProducts = 0;
+        saledProducts.forEach(product => {
+            costOfSaledProducts += product.unitPrice;
+        })
+
+        data.totalRevenue = data.totalSale - costOfSaledProducts;
+        // End total sale & total revenue
+
+        // total cost
+        let deals = await Deal.find();
+        // calculating total cost 
+        data.totalCost = 0;
+        deals.forEach(deal => {
+            data.totalCost += deal.deal_value;
+        })
+
         
         res.json({
-            // data,
-            orders: orders,
+            // totalCost,
+            // saledProducts,
+            data,
+            // productIds,
             message:"Short summary fetched",
             error: false
         })
@@ -45,6 +79,8 @@ dashboard.shortSummary = async (req, res) => {
         })
     }
 }
+
+
 
 
 
