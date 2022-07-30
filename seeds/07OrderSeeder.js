@@ -43,8 +43,6 @@ async function factory() {
                 "returned",
                 "cancelled",
             ]),
-            "last_call": new Date(),
-            "deliveredAt": new Date(),
         });
     }
     

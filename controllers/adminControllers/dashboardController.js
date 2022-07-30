@@ -112,7 +112,7 @@ dashboard.topCategories = async (req, res) => {
         if (req.query.year) {
             orders = await Order.find({
                 status: 'delivered',
-                deliveredAt: { $gte: `${req.query.year}-01-01T00:00:00.000Z`, $lte: `${req.query.year}-12-31T00:00:00.000Z` }
+                "statusDates.delivered": { $gte: `${req.query.year}-01-01T00:00:00.000Z`, $lte: `${req.query.year}-12-31T00:00:00.000Z` }
             })
             // .populate('cartItem.product', 'price')
             .populate('cartItem.product', 'category')
@@ -139,9 +139,9 @@ dashboard.topCategories = async (req, res) => {
                 item.product.category.map(cat => {
                     // console.log(cat)
                     if (countCategories.hasOwnProperty(cat)) {
-                        countCategories[cat] += item.count + 1;
+                        countCategories[cat] += item.count;
                     } else {
-                        countCategories[cat] = item.count + 1;
+                        countCategories[cat] = item.count;
                     }
                     
                 })
@@ -193,7 +193,7 @@ dashboard.sellingStatus = async (req, res) => {
         // get orders
         const orders = await Order.find({
                 status: 'delivered',
-                deliveredAt: { $gte: `${req.query.year}-01-01T00:00:00.000Z`, $lte: `${req.query.year}-12-31T00:00:00.000Z` }
+                "statusDates.delivered": { $gte: `${req.query.year}-01-01T00:00:00.000Z`, $lte: `${req.query.year}-12-31T00:00:00.000Z` }
             })
             .populate('cartItem.product', 'price')
             .populate('cartItem.product', 'price')
@@ -201,7 +201,7 @@ dashboard.sellingStatus = async (req, res) => {
                 "cartItem": 1,
                 "discount": 1,
                 "status": 1,
-                "deliveredAt": 1
+                "statusDates": 1
             });
         
         let sellingStatus = {};
@@ -239,7 +239,7 @@ dashboard.sellingStatus = async (req, res) => {
 function orderSummaryByMonth(month, orders) {
     let data = {};
     const filteredOrder = orders.filter(order => {
-        if (month === new Date(order.deliveredAt).getMonth()) {
+        if (month === new Date(order.statusDates.delivered).getMonth()) {
             return true;
         } else return false;
     })

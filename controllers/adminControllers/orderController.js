@@ -52,8 +52,23 @@ order.updateOrder = async (req, res) => {
             req.body.last_call = Date.now();
         }
         if (req.body.hasOwnProperty('status')) { 
-            if (req.body.status === "delivered") {
-                req.body.deliveredAt = new Date();
+            const tempOrder = await Order.findById(req.params.id);
+            let statusDates = tempOrder.statusDates;
+            if (req.body.status === "processing") {
+                statusDates.processing = new Date(); 
+                req.body.statusDates = statusDates;
+            } else if (req.body.status === "shipped") {
+                statusDates.shipped = new Date(); 
+                req.body.statusDates = statusDates;
+            } else if (req.body.status === "delivered") {
+                statusDates.delivered = new Date(); 
+                req.body.statusDates = statusDates;
+            } else if (req.body.status === "returned") {
+                statusDates.returned = new Date(); 
+                req.body.statusDates = statusDates;
+            } else if (req.body.status === "cancelled") {
+                statusDates.cancelled = new Date(); 
+                req.body.statusDates = statusDates;
             } 
         }
         const order = await Order.findByIdAndUpdate(

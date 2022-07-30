@@ -14,11 +14,11 @@ module.exports = (req, res, next) => {
         if (decoded.role !== "admin") {
             return res.status(401).send("Invalid Token");
         }
-        res.send(decoded)
+        // res.send(decoded)
     } catch (err) {
         return res.status(401).send("Invalid Token");
     }
 	
-	req.user = decoded;
+	// req.user = decoded;
 	next();
 };

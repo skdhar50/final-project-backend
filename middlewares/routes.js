@@ -52,7 +52,7 @@ module.exports = (app) => {
 	app.use("/api/coupon", userCouponRouter);
 
 	// admin
-	// app.use("/api/admin", adminAuth);
+	app.use("/api/admin", adminAuth);
 	app.use("/api/admin/users", adminUserRouter);
 	app.use("/api/admin/brands", adminBrandRouter);
 	app.use("/api/admin/categories", adminCategoryRouter);
