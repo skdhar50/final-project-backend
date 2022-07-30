@@ -66,8 +66,8 @@ order.updateOrder = async (req, res) => {
             } else if (req.body.status === "returned") {
                 statusDates.returned = new Date(); 
                 req.body.statusDates = statusDates;
-            } else if (req.body.status === "cancelled") {
-                statusDates.cancelled = new Date(); 
+            } else if (req.body.status === "canceled") {
+                statusDates.canceled = new Date(); 
                 req.body.statusDates = statusDates;
             } 
         }

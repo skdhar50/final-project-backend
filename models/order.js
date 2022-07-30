@@ -84,7 +84,7 @@ module.exports.Order = model(
 				shipped: Date,
 				delivered: Date,
 				returned: Date,
-				cancelled: Date
+				canceled: Date
 			}
 		},
 		{ timestamps: true }
