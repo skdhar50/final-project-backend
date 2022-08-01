@@ -3,6 +3,7 @@ const { Profile } = require("../models/profile");
 const upload = require("../middlewares/profileMulter");
 const multer = require("multer");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const _ = require("lodash");
 
 module.exports.signIn = async (req, res) => {
@@ -135,4 +136,43 @@ module.exports.changePassword = async (req, res) => {
 	return res
 		.status(200)
 		.send({ message: "Password updated successfully", type: "success" });
+};
+
+module.exports.forgetPassword = async (req, res) => {
+	const user = await User.findOne({ email: req.body.email });
+
+	if (!user) {
+		return res
+			.status(404)
+			.send({ message: "This email is not registered.", type: "error" });
+	}
+
+	const resetToken = jwt.sign(
+		{ email: req.body.email },
+		process.env.TOKEN_SECRET,
+		{ expiresIn: "30m" }
+	);
+
+	return res
+		.status(200)
+		.send({ data: { token: resetToken, user_email: user.email } });
+};
+
+module.exports.resetNewPassword = async (req, res) => {
+	let user = await User.findOne({ email: req.body.email });
+
+	if (user) {
+		const salt = await bcrypt.genSalt(10);
+		hashedPassword = await bcrypt.hash(req.body.password, salt);
+
+		await User.updateOne(
+			{ email: req.body.email },
+			{ password: hashedPassword }
+		);
+
+		return res.status(200).send({
+			message: "Password changed successfully!",
+			type: "success",
+		});
+	}
 };

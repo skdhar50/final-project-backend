@@ -13,6 +13,7 @@ const userOrderRouter = require("../routers/orderRouter");
 const userCityLocationRouter = require("../routers/cityLocationRouter");
 const userPaymentRouter = require("../routers/paymentRouter");
 const userCouponRouter = require("../routers/couponRouter");
+const userCarouselRouter = require("../routers/carouselRouter");
 
 // admin routes imports
 const adminUserRouter = require("../routers/adminRouters/userRouter");
@@ -30,8 +31,8 @@ const adminReviewRouter = require("../routers/adminRouters/reviewRouter");
 const adminOfferRouter = require("../routers/adminRouters/offerRouter");
 const adminCouponRouter = require("../routers/adminRouters/couponRouter");
 const adminNotificationRouter = require("../routers/adminRouters/notificationRouter");
-const adminCrmRouter = require('../routers/adminRouters/crmRouter');
-const adminDashboard = require('../routers/adminRouters/dashboardRouter');
+const adminCrmRouter = require("../routers/adminRouters/crmRouter");
+const adminDashboard = require("../routers/adminRouters/dashboardRouter");
 const adminAuth = require("./adminAuth");
 
 module.exports = (app) => {
@@ -50,6 +51,7 @@ module.exports = (app) => {
 	app.use("/api/qna", userQnaRouter);
 	app.use("/api/payment", userPaymentRouter);
 	app.use("/api/coupon", userCouponRouter);
+	app.use("/api/carousel", userCarouselRouter);
 
 	// admin
 	// app.use("/api/admin", adminAuth);
@@ -68,6 +70,6 @@ module.exports = (app) => {
 	app.use("/api/admin/offers", adminOfferRouter);
 	app.use("/api/admin/coupons", adminCouponRouter);
 	app.use("/api/admin/notifications", adminNotificationRouter);
-	app.use('/api/admin/crm', adminCrmRouter);
-	app.use('/api/admin/dashboard', adminDashboard);
+	app.use("/api/admin/crm", adminCrmRouter);
+	app.use("/api/admin/dashboard", adminDashboard);
 };
