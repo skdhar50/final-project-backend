@@ -31,7 +31,7 @@ order.showOrder = async (req, res) => {
         const order = await Order
             .findById(req.params.id)
             .populate('user', 'name email')
-            .populate('cartItem.product', 'name price photos color size');
+            .populate('cartItem.product', 'name price unitPrice photos color size');
         res.json({
             data: {
                 order,

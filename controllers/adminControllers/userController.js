@@ -133,6 +133,22 @@ user.userProfile = async (req, res) => {
 					as: "reviews",
 				},
 			},
+			{
+				$lookup: {
+					from: "qnas",
+					localField: "_id",
+					foreignField: "user",
+					as: "qnas",
+				},
+			},
+			{
+				$lookup: {
+					from: "wishlists",
+					localField: "_id",
+					foreignField: "user",
+					as: "wishlists",
+				},
+			},
 			{ $unwind: "$profile" },
 		]);
 
