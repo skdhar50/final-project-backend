@@ -31,7 +31,7 @@ order.showOrder = async (req, res) => {
         const order = await Order
             .findById(req.params.id)
             .populate('user', 'name email')
-            .populate('cartItem.product', 'name price photos color size');
+            .populate('cartItem.product', 'name price unitPrice photos color size');
         res.json({
             data: {
                 order,
@@ -51,6 +51,26 @@ order.updateOrder = async (req, res) => {
         if (req.body.hasOwnProperty('call_status')) {
             req.body.last_call = Date.now();
         }
+        if (req.body.hasOwnProperty('status')) { 
+            const tempOrder = await Order.findById(req.params.id);
+            let statusDates = tempOrder.statusDates;
+            if (req.body.status === "processing") {
+                statusDates.processing = new Date(); 
+                req.body.statusDates = statusDates;
+            } else if (req.body.status === "shipped") {
+                statusDates.shipped = new Date(); 
+                req.body.statusDates = statusDates;
+            } else if (req.body.status === "delivered") {
+                statusDates.delivered = new Date(); 
+                req.body.statusDates = statusDates;
+            } else if (req.body.status === "returned") {
+                statusDates.returned = new Date(); 
+                req.body.statusDates = statusDates;
+            } else if (req.body.status === "canceled") {
+                statusDates.canceled = new Date(); 
+                req.body.statusDates = statusDates;
+            } 
+        }
         const order = await Order.findByIdAndUpdate(
             req.params.id,
             { $set: { ...req.body } },
@@ -59,19 +79,12 @@ order.updateOrder = async (req, res) => {
         if (req.body.hasOwnProperty('status')) {
 
             if (req.body.status === "delivered") {
-                //incrementing total sell
-                // const order = await Order
-                //     .findById(req.params.id)
-                //     .populate('cartItem.product', 'product count');
                 
                 order.cartItem.forEach(async item => {
                     const product = await Product.findOneAndUpdate( {_id: item.product}, 
                         {$inc : {'totalSell' : item.count}}, 
                         { new: true }
                     );
-                    // console.log(item.product);
-                    // console.log(item.count)
-                    // console.log("####################")
                     
                 });
             } else if (order.status === "delivered" && req.body.status !== "delivered") {
@@ -80,9 +93,6 @@ order.updateOrder = async (req, res) => {
                         {$inc : {'totalSell' : -item.count}}, 
                         { new: true }
                     );
-                    // console.log(item.product);
-                    // console.log(item.count)
-                    // console.log("####################")
                     
                 });
             }

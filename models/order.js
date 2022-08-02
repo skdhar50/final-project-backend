@@ -78,7 +78,15 @@ module.exports.Order = model(
 			},
 			last_call: Date,
 			discount: Number,
+			coupon: String,
 			sessionKey: String,
+			statusDates: {
+				processing: Date,
+				shipped: Date,
+				delivered: Date,
+				returned: Date,
+				canceled: Date
+			}
 		},
 		{ timestamps: true }
 	)
