@@ -1,4 +1,5 @@
 const { Product } = require('../../models/product');
+const { Qna } = require('../../models/qna');
 const { Review } = require('../../models/review');
 const {base64Decode} = require('../../utilities/base64');
 const { totalSale } = require('../../utilities/productHelpers');
@@ -72,8 +73,11 @@ product.showProduct = async (req, res) => {
             .populate('brand', 'name')
             .populate('category', 'name');
         
-        product._doc.totalSale = await totalSale(req.params.id);
+        // product._doc.totalSale = await totalSale(req.params.id);
         product._doc.reviews = await Review.where('product')
+            .equals(req.params.id)
+            .populate('user', 'name');
+        product._doc.qna = await Qna.where('product')
             .equals(req.params.id)
             .populate('user', 'name');
 
@@ -193,5 +197,30 @@ product.removePhoto = async (req, res) => {
     }
     
 }
+
+product.answerQna = async (req, res) => {
+	
+	try {
+		const qna = await Qna.findByIdAndUpdate(
+			req.params.id,
+			{
+				$set: { ...req.body, answeredAt: new Date() },
+			},
+			{ new: true }
+		);
+		res.json({
+			data: {
+				qna,
+			},
+			message: "Answered",
+			error: false,
+		});
+	} catch (err) {
+		res.status(500).json({
+			message: "There was a server side error!",
+			error: true,
+		});
+	}
+};
 
 module.exports = product;

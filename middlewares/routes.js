@@ -54,7 +54,7 @@ module.exports = (app) => {
 	app.use("/api/carousel", userCarouselRouter);
 
 	// admin
-	// app.use("/api/admin", adminAuth);
+	app.use("/api/admin", adminAuth);
 	app.use("/api/admin/users", adminUserRouter);
 	app.use("/api/admin/brands", adminBrandRouter);
 	app.use("/api/admin/categories", adminCategoryRouter);

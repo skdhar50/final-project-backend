@@ -43,7 +43,6 @@ async function factory() {
                 "returned",
                 "cancelled",
             ]),
-            "last_call": "",
         });
     }
     

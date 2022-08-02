@@ -14,7 +14,7 @@ module.exports.Notification = model(
             },
             type: {
                 type: String,
-                enum: ["individual", "public"],
+                // enum: ["individual", "public"],
                 required: true,
             },
             notify_for: [
@@ -29,6 +29,10 @@ module.exports.Notification = model(
                     ref: "User",
                 },
             ],
+            product_id: {
+                type: Schema.Types.ObjectId,
+                ref: "Product",
+            },
             status: {
                 type: String,
                 enum: ["draft", "active", "inactive"],
