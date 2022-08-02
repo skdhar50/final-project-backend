@@ -80,6 +80,19 @@ module.exports.placeOrder = async (req, res) => {
 	}
 
 	if (paymentMethod === "cod") {
+		selectedProducts.forEach(async (item) => {
+			const originalCount = await Product.find({
+				_id: item.product._id,
+			}).select({ quantity: 1 });
+
+			await Product.updateOne(
+				{
+					_id: item.product._id,
+				},
+				{ quantity: originalCount[0] - item.count }
+			);
+		});
+		
 		await CartItem.deleteMany({ user: req.user._id, isSelected: true });
 	}
 
