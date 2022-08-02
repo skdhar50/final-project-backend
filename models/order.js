@@ -78,6 +78,7 @@ module.exports.Order = model(
 			},
 			last_call: Date,
 			discount: Number,
+			coupon: String,
 			sessionKey: String,
 			statusDates: {
 				processing: Date,
