@@ -7,7 +7,11 @@ notification.notificationList = async (req, res) => {
     try {
         res.json({
             data: {
-                notifications: await Notification.find().sort({ _id: -1 }),
+                notifications: await Notification.find()
+                    .populate('product_id', 'name photos')
+                    .limit(20)
+                    .sort({ _id: -1 }),
+                totalNotification: await Notification.count()
             },
             message: "Successfully retrievied!",
             error: false,

@@ -169,6 +169,10 @@ user.userProfile = async (req, res) => {
 
 user.updateUser = async (req, res) => {
 	try {
+		
+		if (req.body.hasOwnProperty('password')) {
+			req.body.password = await bcrypt.hash(req.body.password, 10);
+		}
 		const user = await User.findByIdAndUpdate(
 			req.params.id,
 			{ $set: { ...req.body } },
