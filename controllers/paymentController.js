@@ -17,15 +17,13 @@ module.exports.ipnReceiver = async (req, res) => {
 	const payment = new Payment(req.body);
 	const tran_id = payment["tran_id"];
 
-	console.log(req.body);
-
 	const order = await Order.findOne({ transaction_id: tran_id });
 	if (payment["status"] === "VALID") {
-		const selectedProducts = await CartItem.find({
-			user: req.user._id,
-			isSelected: true,
-		});
-		selectedProducts.forEach(async (item) => {
+		// const selectedProducts = await CartItem.find({
+		// 	user: req.user._id,
+		// 	isSelected: true,
+		// });
+		order[0].cartItem.forEach(async (item) => {
 			const originalCount = await Product.find({
 				_id: item.product._id,
 			}).select({ quantity: 1 });
