@@ -88,7 +88,7 @@ module.exports.initPayment = async (req, res) => {
 	});
 
 	payment.setOrderInfo({
-		total_amount: total_amount,
+		total_amount: total_amount + 50,
 		currency: "BDT",
 		tran_id: transaction_id,
 		emi_option: 0,
