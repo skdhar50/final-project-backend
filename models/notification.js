@@ -12,32 +12,10 @@ module.exports.Notification = model(
                 type: String,
                 required: true,
             },
-            // type: {
-            //     type: String,
-            //     // enum: ["individual", "public"],
-            //     // required: true,
-            // },
-            // notify_for: [
-            //     {
-            //         type: Schema.Types.ObjectId,
-            //         ref: "User",
-            //     },
-            // ],
-            // seen_by: [
-            //     {
-            //         type: Schema.Types.ObjectId,
-            //         ref: "User",
-            //     },
-            // ],
             product_id: {
                 type: Schema.Types.ObjectId,
                 ref: "Product",
             },
-            // status: {
-            //     type: String,
-            //     enum: ["draft", "active", "inactive"],
-            //     default: "draft",
-            // },
         },
         { timestamps: true }
     )
