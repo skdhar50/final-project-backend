@@ -83,7 +83,7 @@ module.exports.specificProducts = async (req, res) => {
 	// AccessoriesHuawei
 
 	// console.log(key, value);
-	console.log(currentPage);
+	// console.log(currentPage);
 	const pages = await Product.find({ [key]: { $in: value } }).countDocuments();
 	const products = await Product.find({
 		[key]: { $in: value },
@@ -91,7 +91,7 @@ module.exports.specificProducts = async (req, res) => {
 		.skip((currentPage - 1) * 20)
 		.limit(20);
 
-	console.log(Math.ceil(pages / 20));
+	// console.log(Math.ceil(pages / 20));
 	return res.status(200).send(products);
 
 	// console.log(Object.keys(temp)[0], Object.values(temp)[0]);

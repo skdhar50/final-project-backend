@@ -8,7 +8,7 @@ const _ = require("lodash");
 
 module.exports.signIn = async (req, res) => {
 	// Checking if the user is exist
-	let user = await User.findOne({ email: req.body.email });
+	let user = await User.findOne({ email: req.body.email, status: "active" });
 	if (!user) {
 		return res
 			.status(404)

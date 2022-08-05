@@ -4,16 +4,34 @@ const _ = require("lodash");
 module.exports.getCartItems = async (req, res) => {
 	const items = await CartItem.find({ user: req.user._id }).populate(
 		"product",
-		"name unitPrice photos description"
+		"name unitPrice photos quantity description"
 	);
-	// .populate("user", "name");
+
+	items.forEach(async (item) => {
+		if (item.product.quantity < item.count) {
+			if (item.product.quantity === 0) {
+				await CartItem.updateOne(
+					{ _id: item._id, user: req.user._id },
+					{ count: item.product.quantity, isSelected: false }
+				);
+				item.count = item.product.quantity;
+				item.isSelected = false;
+			} else {
+				await CartItem.updateOne(
+					{ _id: item._id, user: req.user._id },
+					{ count: item.product.quantity }
+				);
+				item.count = item.product.quantity;
+			}
+		}
+	});
 
 	return res.status(200).send({ data: items });
 };
 
 module.exports.selectAllCartItems = async (req, res) => {
 	const items = await CartItem.updateMany(
-		{ user: req.user._id },
+		{ user: req.user._id, "product.quantity": { $gt: 0 } },
 		{ isSelected: req.body.flag }
 	);
 
@@ -22,7 +40,7 @@ module.exports.selectAllCartItems = async (req, res) => {
 
 module.exports.selectSingleItem = async (req, res) => {
 	const item = await CartItem.updateOne(
-		{ _id: req.body._id, user: req.user._id },
+		{ _id: req.body._id, user: req.user._id, "product.quantity": {$gt: 0} },
 		{ isSelected: req.body.flag }
 	);
 
@@ -65,12 +83,28 @@ module.exports.addCartItem = async (req, res) => {
 
 module.exports.updateCartItem = async (req, res) => {
 	const { _id, count } = _.pick(req.body, ["_id", "count"]);
+	const item = await CartItem.find({ _id: _id, user: req.user._id }).populate(
+		"product"
+	);
 
-	await CartItem.updateOne({ _id: _id, user: req.user._id }, { count: count });
+	if (
+		item[0].product.quantity > 0 &&
+		item[0].product.quantity > item[0].count
+	) {
+		await CartItem.updateOne(
+			{ _id: _id, user: req.user._id },
+			{ count: count }
+		);
 
-	return res
-		.status(200)
-		.send({ message: "Item updated successfully!", type: "success" });
+		return res
+			.status(200)
+			.send({ message: "Item updated successfully!", type: "success" });
+	} else {
+		return res.status(400).send({
+			message: `Sorry! Only ${item[0].product.quantity} items are available.`,
+			type: "error",
+		});
+	}
 };
 
 module.exports.deleteCartItem = async (req, res) => {
