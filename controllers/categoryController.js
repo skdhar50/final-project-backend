@@ -3,7 +3,7 @@ const { Category } = require("../models/category");
 module.exports.getCategories = async (req, res) => {
 	let categories = [];
 	let parents = [];
-	let temp = await Category.find();
+	let temp = await Category.find({ status: 'active' });
 
 	temp.forEach((cat) => {
 		categories.push({
@@ -37,4 +37,13 @@ module.exports.getCategories = async (req, res) => {
 	}
 
 	return res.status(200).send({ data: parents });
+};
+
+module.exports.getFeaturedCategory = async (req, res) => {
+	const featuredCategory = await Category.find({
+		status: 'active',
+		isFeatured: true,
+	}).select({ name: 1, photo: 1 });
+
+	return res.status(200).send({ data: featuredCategory });
 };

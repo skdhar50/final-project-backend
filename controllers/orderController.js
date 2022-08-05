@@ -5,6 +5,7 @@ const uuid = require("../utilities/helpers/uuid");
 const _ = require("lodash");
 const { Coupon } = require("../models/coupon");
 const { request } = require("express");
+const url = require("url");
 
 function setOrderId() {
 	let result = "";
@@ -26,11 +27,18 @@ module.exports.getOrderDetails = async (req, res) => {
 };
 
 module.exports.getOrders = async (req, res) => {
+	const query = url.parse(req.url, true).query;
+	const temp = { ...query };
+	const currentPage = Object.values(temp)[0];
+
+	const pages = await Order.find({ user: req.user._id }).countDocuments();
 	const orders = await Order.find({ user: req.user._id })
 		.sort({ createdAt: -1 })
-		.populate("cartItem.product");
+		.populate("cartItem.product")
+		.skip((currentPage - 1) * 10)
+		.limit(10);
 
-	return res.status(200).send({ data: orders });
+	return res.status(200).send({ data: orders, pages: Math.ceil(pages / 10) });
 };
 
 module.exports.placeOrder = async (req, res) => {
@@ -44,7 +52,11 @@ module.exports.placeOrder = async (req, res) => {
 	let tempCart = [];
 
 	selectedProducts.forEach((product) => {
-		tempCart.push(_.pick(product, ["product", "count", "user", "isSelected"]));
+		if (product.product.quantity >= product.count) {
+			tempCart.push(
+				_.pick(product, ["product", "count", "user", "isSelected"])
+			);
+		}
 	});
 
 	const selectedShippingAddress = {
@@ -92,7 +104,7 @@ module.exports.placeOrder = async (req, res) => {
 				{ quantity: originalCount[0] - item.count }
 			);
 		});
-		
+
 		await CartItem.deleteMany({ user: req.user._id, isSelected: true });
 	}
 
