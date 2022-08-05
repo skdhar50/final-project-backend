@@ -1,5 +1,6 @@
 const { Category } = require('../../models/category');
 const mongoose = require('mongoose');
+const {base64Decode} = require('../../utilities/base64');
 
 let category = {}
 
@@ -24,6 +25,7 @@ category.categoryList = async (req, res) => {
 category.createCategory = async (req, res) => {
     if (req.body.hasOwnProperty('photo')) {
         req.body.photo = base64Decode(req.body.photo, 'CATEGORY');
+    
     }
     const newCategory = new Category({...req.body});
     try{
@@ -83,6 +85,9 @@ category.showCategory = async (req, res) => {
 category.updateCategory = async (req, res) => {
     
     try {
+        if (req.body.hasOwnProperty('photo')) {
+        req.body.photo = base64Decode(req.body.photo, 'CATEGORY');
+    }
         
         const category = await Category.findByIdAndUpdate(
             req.params.id,

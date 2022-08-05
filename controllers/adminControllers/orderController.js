@@ -82,27 +82,35 @@ order.updateOrder = async (req, res) => {
                 
                 order.cartItem.forEach(async item => {
                     const product = await Product.findOneAndUpdate( {_id: item.product}, 
-                        {$inc : {'totalSell' : item.count}}, 
-                        { new: true }
+                        {$inc : {'totalSell' : item.count}},
                     );
                     
                 });
             } else if (order.status === "delivered" && req.body.status !== "delivered") {
                 order.cartItem.forEach(async item => {
                     const product = await Product.findOneAndUpdate( {_id: item.product}, 
-                        {$inc : {'totalSell' : -item.count}}, 
-                        { new: true }
+                        { $inc: { 'totalSell': -item.count } },
+                        {$inc : {'quantity' : item.count}},
                     );
                     
                 });
             }
-            notificationMaker(
-                'Order Status Changed',
-                'Your order: #'+order._id+' changed to '+req.body.status,
-                'individual',
-                [order.user],
-                'active'
-            );
+            if (req.body.status === "cancelled") {
+                
+                order.cartItem.forEach(async item => {
+                    const product = await Product.findOneAndUpdate( {_id: item.product}, 
+                        {$inc : {'quantity' : item.count}}, 
+                    );
+                    
+                });
+            }
+            // notificationMaker(
+            //     'Order Status Changed',
+            //     'Your order: #'+order._id+' changed to '+req.body.status,
+            //     'individual',
+            //     [order.user],
+            //     'active'
+            // );
         }
         res.json({
             data: {

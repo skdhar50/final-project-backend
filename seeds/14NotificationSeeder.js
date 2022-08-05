@@ -13,6 +13,7 @@ function factory() {
             "description": faker.lorem.words(30),
             "type": "public",
             "seen_by": [],
+            "product_id": "62db6b988bbabb3b0f28cf55",
             "status": faker.random.arrayElement(["active", "inactive"]),
         });
     }
