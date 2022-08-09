@@ -32,7 +32,13 @@ module.exports.productDetails = async (req, res) => {
 		.populate("category", "name")
 		.populate("brand", "name");
 
-	return res.status(200).send({ data: product });
+	const relavent = await Product.find({
+		category: { $in: product[0].category },
+	})
+		.populate("category", "name")
+		.limit(10);
+
+	return res.status(200).send({ data: product, relavent: relavent });
 };
 
 module.exports.filterProducts = async (req, res) => {
