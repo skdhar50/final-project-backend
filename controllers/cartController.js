@@ -31,18 +31,21 @@ module.exports.getCartItems = async (req, res) => {
 
 module.exports.selectAllCartItems = async (req, res) => {
 	const items = await CartItem.updateMany(
-		{ user: req.user._id, "product.quantity": { $gt: 0 } },
+		{ user: req.user._id, count: {$gt: 0} },
 		{ isSelected: req.body.flag }
 	);
+
+	console.log(items);
 
 	return res.status(200).send({ data: items });
 };
 
 module.exports.selectSingleItem = async (req, res) => {
 	const item = await CartItem.updateOne(
-		{ _id: req.body._id, user: req.user._id, "product.quantity": {$gt: 0} },
+		{ _id: req.body._id, user: req.user._id },
 		{ isSelected: req.body.flag }
 	);
+	console.log(item);
 
 	return res.status(200).send({ data: item });
 };
