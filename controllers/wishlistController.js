@@ -1,19 +1,26 @@
 const { WishList } = require("../models/wishlist");
 const { CartItem } = require("../models/cartItem");
-const url =require("url")
+const url = require("url");
+
+module.exports.allWishListData = async (req, res) => {
+	const totalItems = await WishList.find({ user: req.user._id });
+
+	return res.status(200).send({ data: totalItems[0].products.length });
+};
 
 module.exports.getWishlist = async (req, res) => {
 	const query = url.parse(req.url, true).query;
 	const temp = { ...query };
 	const currentPage = Object.values(temp)[0];
 
-	const pages = await WishList.find({ user: req.user._id }).countDocuments();
 	const wishlist = await WishList.find({ user: req.user._id })
-		.populate("products", "name description photos")
-		.skip((currentPage - 1) * 10)
-		.limit(10);
+		.select({ products: 1 })
+		.populate("products", "name description photos");
 
-	return res.status(200).send({ data: wishlist, pages: Math.ceil(pages / 10) });
+	return res.status(200).send({
+		data: wishlist[0].products.slice(((currentPage - 1) * 10), currentPage * 10),
+		pages: Math.ceil(wishlist[0].products.length / 10),
+	});
 };
 
 module.exports.addToWishlist = async (req, res) => {

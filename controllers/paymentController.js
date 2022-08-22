@@ -72,7 +72,7 @@ module.exports.initPayment = async (req, res) => {
 
 	// Calculating the total_amount
 	const total_amount = selectedProducts
-		.map((item) => item.product.unitPrice * item.count)
+		.map((item) => item.product.price * item.count)
 		.reduce((a, b) => a + b, 0);
 
 	const total_items = selectedProducts
@@ -88,7 +88,7 @@ module.exports.initPayment = async (req, res) => {
 	});
 
 	payment.setOrderInfo({
-		total_amount: total_amount,
+		total_amount: total_amount + 50,
 		currency: "BDT",
 		tran_id: transaction_id,
 		emi_option: 0,

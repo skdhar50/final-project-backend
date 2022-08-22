@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "npx nodemon server.js"
+    "start": "npx node server.js"
   },
   "engines": {
     "node": "18.3.0"

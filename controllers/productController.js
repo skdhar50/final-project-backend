@@ -1,4 +1,5 @@
 const { Product } = require("../models/product");
+const { Brand } = require("../models/brand");
 const url = require("url");
 
 module.exports.allProducts = async (req, res) => {
@@ -8,6 +9,16 @@ module.exports.allProducts = async (req, res) => {
 		.populate("brand", "name");
 
 	return res.status(200).send({ data: products });
+};
+
+module.exports.relevantBrands = async (req, res) => {
+	const products = await Product.distinct("brand", {
+		category: req.params.id,
+	});
+
+	const brands = await Brand.find({ _id: { $in: products } });
+
+	return res.status(200).send({ data: brands });
 };
 
 module.exports.getPageCount = async (req, res) => {
@@ -32,7 +43,13 @@ module.exports.productDetails = async (req, res) => {
 		.populate("category", "name")
 		.populate("brand", "name");
 
-	return res.status(200).send({ data: product });
+	const relavent = await Product.find({
+		category: { $in: product[0].category },
+	})
+		.populate("category", "name")
+		.limit(10);
+
+	return res.status(200).send({ data: product, relavent: relavent });
 };
 
 module.exports.filterProducts = async (req, res) => {
@@ -60,7 +77,7 @@ module.exports.filterProducts = async (req, res) => {
 	}
 
 	// Fatching the data from the database using the request body
-	const pages = await Product.find({ ...args }).countDocuments();
+	const total = await Product.find({ ...args }).countDocuments();
 
 	const products = await Product.find({ ...args })
 		.sort({ [sortBy]: order })
@@ -70,7 +87,9 @@ module.exports.filterProducts = async (req, res) => {
 		.populate("brand");
 
 	// Sending back the results
-	return res.status(200).send({ data: products, pages: Math.ceil(pages / 20) });
+	return res
+		.status(200)
+		.send({ data: products, pages: Math.ceil(total / 20), totalItems: total });
 };
 
 module.exports.specificProducts = async (req, res) => {
