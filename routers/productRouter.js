@@ -6,7 +6,10 @@ const {
 	searchProducts,
 	getPageCount,
 	specificProducts,
+	relevantBrands,
 } = require("../controllers/productController");
+
+router.route("/relevant/:id").get(relevantBrands);
 
 router.route("/all").get(specificProducts);
 router.route("/countPages").get(getPageCount);

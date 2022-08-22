@@ -4,7 +4,7 @@ const _ = require("lodash");
 module.exports.getCartItems = async (req, res) => {
 	const items = await CartItem.find({ user: req.user._id }).populate(
 		"product",
-		"name unitPrice photos quantity description"
+		"name price photos quantity description"
 	);
 
 	items.forEach(async (item) => {

@@ -72,7 +72,7 @@ module.exports.initPayment = async (req, res) => {
 
 	// Calculating the total_amount
 	const total_amount = selectedProducts
-		.map((item) => item.product.unitPrice * item.count)
+		.map((item) => item.product.price * item.count)
 		.reduce((a, b) => a + b, 0);
 
 	const total_items = selectedProducts
