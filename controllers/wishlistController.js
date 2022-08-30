@@ -5,7 +5,7 @@ const url = require("url");
 module.exports.allWishListData = async (req, res) => {
 	const totalItems = await WishList.find({ user: req.user._id });
 
-	return res.status(200).send({ data: totalItems[0].products.length });
+	return res.status(200).send({ data: totalItems[0]?.products?.length });
 };
 
 module.exports.getWishlist = async (req, res) => {

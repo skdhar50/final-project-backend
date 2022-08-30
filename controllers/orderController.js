@@ -4,8 +4,8 @@ const { ShippingAddress } = require("../models/shippingAddress");
 const uuid = require("../utilities/helpers/uuid");
 const _ = require("lodash");
 const { Coupon } = require("../models/coupon");
-const { request } = require("express");
 const url = require("url");
+const { Product } = require("../models/product");
 
 function setOrderId() {
 	let result = "";
@@ -45,19 +45,22 @@ module.exports.placeOrder = async (req, res) => {
 	const selectedProducts = await CartItem.find({
 		user: req.user._id,
 		isSelected: true,
-	});
+	}).populate("product");
 
 	const temp = req.body.shipping;
 	const paymentMethod = req.body.paymentMethod;
 	let tempCart = [];
 
-	selectedProducts.forEach((product) => {
-		if (product.product.quantity >= product.count) {
+	selectedProducts.forEach((item) => {
+		// console.log(item);
+		if (item.product?.quantity >= item.count) {
 			tempCart.push(
-				_.pick(product, ["product", "count", "user", "isSelected"])
+				_.pick(item, ["product", "count", "user", "isSelected"])
 			);
 		}
 	});
+
+	// console.log(tempCart);
 
 	const selectedShippingAddress = {
 		name: temp.name,
@@ -71,7 +74,7 @@ module.exports.placeOrder = async (req, res) => {
 	};
 
 	const newOrder = new Order({
-		cartItem: tempCart,
+		cartItem: [...tempCart],
 		transaction_id: uuid(),
 		order_id: setOrderId(),
 		address: selectedShippingAddress,
@@ -80,6 +83,8 @@ module.exports.placeOrder = async (req, res) => {
 		discount: req.body.discount,
 		coupon: req.body.coupon,
 	});
+
+	// console.log(newOrder)
 
 	const order = await newOrder.save();
 	if (req.body.discount > 0) {
@@ -101,7 +106,7 @@ module.exports.placeOrder = async (req, res) => {
 				{
 					_id: item.product._id,
 				},
-				{ quantity: originalCount[0] - item.count }
+				{ quantity: originalCount[0].quantity - item.count }
 			);
 		});
 
