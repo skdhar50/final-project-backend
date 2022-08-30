@@ -17,7 +17,7 @@ module.exports.ipnReceiver = async (req, res) => {
 	const payment = new Payment(req.body);
 	const tran_id = payment["tran_id"];
 
-	const order = await Order.findOne({ transaction_id: tran_id });
+	const order = await Order.find({ transaction_id: tran_id });
 	if (payment["status"] === "VALID") {
 		// const selectedProducts = await CartItem.find({
 		// 	user: req.user._id,
@@ -32,23 +32,23 @@ module.exports.ipnReceiver = async (req, res) => {
 				{
 					_id: item.product._id,
 				},
-				{ quantity: originalCount[0] - item.count }
+				{ quantity: originalCount[0].quantity - item.count }
 			);
 		});
 
-		await CartItem.deleteMany({ user: order.user, isSelected: true });
+		await CartItem.deleteMany({ user: order[0].user, isSelected: true });
 
 		await Order.updateOne(
 			{ transaction_id: tran_id },
 			{ paymentStatus: "complete" }
 		);
 	} else if (payment["status"] === "FAILED") {
-		console.log("here");
-		if (order.discount > 0) {
+		// console.log("here");
+		if (order[0].discount > 0) {
 			await Coupon.updateOne(
-				{ code: order.coupon },
+				{ code: order[0].coupon },
 				{
-					$pull: { appliers: { user: order.user, order_id: order._id } },
+					$pull: { appliers: { user: order[0].user, order_id: order[0]._id } },
 				}
 			);
 		}
@@ -81,10 +81,10 @@ module.exports.initPayment = async (req, res) => {
 
 	payment.setUrls({
 		success_url:
-			"https://calm-fortress-09101.herokuapp.com/api/payment/success",
-		fail_url: "https://calm-fortress-09101.herokuapp.com/api/payment/fail",
+			"https://e-shop-backend.skdhar.com/api/payment/success",
+		fail_url: "https://e-shop-backend.skdhar.com/api/payment/fail",
 		cancel_url: "yoursite.com/cancel",
-		ipn: "https://calm-fortress-09101.herokuapp.com/api/payment/ipn",
+		ipn: "https://e-shop-backend.skdhar.com/api/payment/ipn",
 	});
 
 	payment.setOrderInfo({
